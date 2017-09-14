@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select.dir">Выберите папку</string>
+    <string name="select.file">Выберите файл</string>
+    <string name="select">Выбрать</string>
+    <string name="parent_directory">Выше</string>
+    <string name="items">Элементов</string>
+    <string name="weight">Байт</string>
+    <string name="make_dir">Создать папку</string>
+    <string name="dir_name">Введите имя папки</string>
+    <string name="error_creating_dir">Ошибка создания папки</string>
+    <string name="dirname_empty">Имя папки пустое</string>
+</resources>
