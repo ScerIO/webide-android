@@ -8,11 +8,10 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.Toolbar
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ListView
+import io.sker.fileexplorer.R.drawable.ic_add_black
+import io.sker.fileexplorer.R.drawable.ic_check_black
 import io.sker.fileexplorer.items.Item
 import java.io.File
 
@@ -20,6 +19,11 @@ import java.io.File
  * Dialog fragment
  */
 class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, View.OnKeyListener {
+
+    /**
+     * Absolute root
+     */
+    private var absoluteRoot: File? = null
 
     /**
      * Actually current patch
@@ -35,6 +39,11 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
      * Visible extensions list
      */
     private var visibleExtensions: Array<String>? = null
+
+    /**
+     * Show add dir button
+     */
+    private var showAddDirButton: Boolean = false
 
     /**
      * Callback
@@ -71,6 +80,7 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
         view.setOnKeyListener(this)
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         val listView = view.findViewById<ListView>(R.id.list_view)
+
         val createDirectory = object : CreateDirectory() {
             override fun nameEmpty() = Snackbar.make(view, R.string.dirname_empty, Snackbar.LENGTH_LONG).show()
             override fun error() = Snackbar.make(view, R.string.error_creating_dir, Snackbar.LENGTH_LONG).show()
@@ -83,28 +93,41 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
                 visibleExtensions = visibleExtensions,
                 resultListener = resultListener)
         toolbar.title = if (mode == FileExplorer.MODE_FILE) resources.getString(R.string.select_file) else resources.getString(R.string.select_dir)
-        if (mode == FileExplorer.MODE_DIR) toolbar.inflateMenu(R.menu.context)
+
+        if (showAddDirButton) {
+            val addDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_add_dir, Menu.NONE, "Add dir") // TODO Добавить текстовый ресурс
+            addDirMenuItem.setIcon(ic_add_black)
+            addDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
+
+        if (mode == FileExplorer.MODE_DIR) {
+            val selectDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_confirm, Menu.NONE, "Select dir") // TODO Добавить текстовый ресурс
+            selectDirMenuItem.setIcon(ic_check_black)
+            selectDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
+
         toolbar.setOnMenuItemClickListener{ item ->
-            when (item.itemId){
-                R.id.select_dir -> {
+            when (item.itemId) {
+                R.id.menu_confirm -> {
                     if (resultListener != null)
                         resultListener!!(currentDir.path, this)
                     true
                 }
-                R.id.add_dir -> explorer.addDirectory()
+                R.id.menu_add_dir -> explorer.addDirectory()
                 else -> false
             }
         }
+
         listView.setOnItemClickListener { _, _, position, _ ->
             val item = explorer.adapter.getItem(position)!!
             if (item.type == Item.TYPE_DIR) {
                 currentDir = File(item.path)
-                explorer.explore(currentDir)
+                explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
             } else
                 if (resultListener != null)
                     resultListener!!(item.path, this)
         }
-        explorer.explore(currentDir)
+        explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
         return view
     }
 
@@ -115,7 +138,6 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
                 return true
             }
         }
-
         return false
     }
 
@@ -136,6 +158,18 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
     }
 
     /**
+     * Set root dir
+     * @param root - Root
+     * *
+     * @return instance
+     */
+    fun setRootDir(root: File): FileExplorerDialogFragment {
+        this.absoluteRoot = root
+        this.currentDir = root
+        return this
+    }
+
+    /**
      * Set visible extensions
      * @param extensions - List of extensions
      * *
@@ -143,6 +177,17 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
      */
     fun setVisibleExtensions(extensions: Array<String>): FileExplorerDialogFragment {
         this.visibleExtensions = extensions
+        return this
+    }
+
+    /**
+     * Show add dir button
+     * @param show - default false
+     * *
+     * @return instance
+     */
+    fun showAddDirButton(show: Boolean): FileExplorerDialogFragment {
+        this.showAddDirButton = show
         return this
     }
 

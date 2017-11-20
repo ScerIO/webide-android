@@ -47,6 +47,7 @@ class Create : TabDialog.TabDialogFragment() {
         if (fragmentManager!!.findFragmentByTag("CREATE_PROJECT_FILE_EXPLORER") == null)
             FileExplorerDialogFragment()
                     .setMode(FileExplorer.MODE_DIR)
+                    .showAddDirButton(true)
                     .setResultListener { patch, dialog ->
                         projectPath = patch
                         selectedDirPath.text = patch

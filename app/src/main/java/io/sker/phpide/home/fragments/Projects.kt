@@ -107,7 +107,7 @@ class Projects : TagFragment() {
                     })
                     .onOpenClickListener(View.OnClickListener {
                         val intent = Intent(context, Editor::class.java)
-                        intent.putExtra("CONFIG_PATH", project.configFile.path)
+                        intent.putExtra("CONFIG_PATH", project.configFile.parent)
                         startActivity(intent)
                     })
                     .build()

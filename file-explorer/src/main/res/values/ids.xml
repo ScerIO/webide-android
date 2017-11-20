@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="toolbar" type="id" />
+    <item name="menu_add_dir" type="id" />
+    <item name="menu_confirm" type="id" />
 </resources>

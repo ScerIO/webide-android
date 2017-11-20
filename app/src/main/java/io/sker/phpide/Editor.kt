@@ -2,15 +2,22 @@ package io.sker.phpide
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.TabLayout
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import io.sker.fileexplorer.FileExplorer
+import io.sker.fileexplorer.FilesExplorerView
+import io.sker.phpide.util.getStatusBarHeight
+import java.io.File
 
-class Editor : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class Editor : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,13 +26,37 @@ class Editor : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListe
         setSupportActionBar(toolbar)
 
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        val toggle = ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer.setDrawerListener(toggle)
-        toggle.syncState()
+
+        val path = intent.getStringExtra("CONFIG_PATH") ?: "null"
+
+        Log.v("Editor", path) // TODO Удалить тестовый вывод
+
+        val explorer = FilesExplorerView(this)
+                .setMode(FileExplorer.MODE_FILE)
+                .setRootDir(File(path))
+                .showAddDirButton(true)
+                .setResultListener { patch, _ ->
+                    Log.e("Editor", "onResultExplorer")
+                }
+                .setBackButtonPressedInRootDirectory {
+                    Log.e("Editor", "onDismissExplorer")
+                }
+                .init()
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
+        navigationView.setPadding(0, getStatusBarHeight(this), 0, 0)
+
+        navigationView.addView(explorer)
+
+        val toggle = ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.addDrawerListener(toggle)
+
+        toggle.syncState()
+
+        val tabView = findViewById<TabLayout>(R.id.tab_layout)
+        if (tabView.tabCount == 0)
+            tabView.visibility = View.GONE
     }
 
     override fun onBackPressed() {
@@ -55,26 +86,5 @@ class Editor : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListe
         }
 
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        val id = item.itemId
-
-        when (id) {
-            R.id.nav_camera -> {
-                // Handle the camera action
-            }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-        }
-
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
-        return true
     }
 }

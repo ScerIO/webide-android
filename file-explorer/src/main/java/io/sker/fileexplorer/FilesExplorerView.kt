@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar
 import android.support.v7.widget.Toolbar
 import android.util.AttributeSet
 import android.view.KeyEvent
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ListView
 import android.widget.RelativeLayout
@@ -16,6 +18,11 @@ import java.io.File
  * Files view
  */
 class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyListener {
+
+    /**
+     * Absolute root
+     */
+    private var absoluteRoot: File? = null
 
     /**
      * Actually current patch
@@ -31,6 +38,11 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
      * Visible extensions list
      */
     private var visibleExtensions: Array<String>? = null
+
+    /**
+     * Show add dir button
+     */
+    private var showAddDirButton: Boolean = false
 
     /**
      * FileExplorer
@@ -70,15 +82,27 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
                 visibleExtensions = visibleExtensions,
                 resultListener = resultListener)
         toolbar.title = if (mode == FileExplorer.MODE_FILE) resources.getString(R.string.select_file) else resources.getString(R.string.select_dir)
-        if (mode == FileExplorer.MODE_DIR) toolbar.inflateMenu(R.menu.context)
+
+        if (showAddDirButton) {
+            val addDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_add_dir, Menu.NONE, "Add dir") // TODO Добавить текстовый ресурс
+            addDirMenuItem.setIcon(R.drawable.ic_add_black)
+            addDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
+
+        if (mode == FileExplorer.MODE_DIR) {
+            val selectDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_confirm, Menu.NONE, "Select dir") // TODO Добавить текстовый ресурс
+            selectDirMenuItem.setIcon(R.drawable.ic_check_black)
+            selectDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
+
         toolbar.setOnMenuItemClickListener{ item ->
-            when (item.itemId){
-                R.id.select_dir -> {
+            when (item.itemId) {
+                R.id.menu_confirm -> {
                     if (resultListener != null)
                         resultListener!!(currentDir.path, this)
                     true
                 }
-                R.id.add_dir -> explorer.addDirectory()
+                R.id.menu_add_dir -> explorer.addDirectory()
                 else -> false
             }
         }
@@ -87,12 +111,13 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
             val item = explorer.adapter.getItem(position)!!
             if (item.type == Item.TYPE_DIR) {
                 currentDir = File(item.path)
-                explorer.explore(currentDir)
+                explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
             } else
                 if (resultListener != null)
                     resultListener!!(item.path, this)
         }
-        explorer.explore(currentDir)
+
+        explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
         return this
     }
 
@@ -103,7 +128,6 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
                 return true
             }
         }
-
         return false
     }
 
@@ -124,6 +148,18 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
     }
 
     /**
+     * Set root dir
+     * @param root - Root
+     * *
+     * @return instance
+     */
+    fun setRootDir(root: File): FilesExplorerView {
+        this.absoluteRoot = root
+        this.currentDir = root
+        return this
+    }
+
+    /**
      * Set visible extensions
      * @param extensions - List of extensions
      * *
@@ -131,6 +167,17 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
      */
     fun setVisibleExtensions(extensions: Array<String>): FilesExplorerView {
         this.visibleExtensions = extensions
+        return this
+    }
+
+    /**
+     * Show add dir button
+     * @param show - default false
+     * *
+     * @return instance
+     */
+    fun showAddDirButton(show: Boolean): FilesExplorerView {
+        this.showAddDirButton = show
         return this
     }
 

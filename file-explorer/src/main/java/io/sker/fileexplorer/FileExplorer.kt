@@ -36,6 +36,11 @@ class FileExplorer (
     lateinit var adapter: FilesAdapter
 
     /**
+     * Absolute root
+     */
+    private lateinit var absoluteRoot: File
+
+    /**
      * Actually current patch
      */
     private var currentDir: File = Environment.getExternalStorageDirectory()
@@ -54,7 +59,8 @@ class FileExplorer (
      * Fill files list
      * @param rootDirectory - Directory for explore
      */
-    fun explore(rootDirectory: File) {
+    fun explore(absoluteRoot: File, rootDirectory: File) {
+        this.absoluteRoot = absoluteRoot
         currentDir = rootDirectory
         val dirs = rootDirectory.listFiles()
         val dir = ArrayList<Item>()
@@ -102,14 +108,14 @@ class FileExplorer (
                 Collections.sort(files)
                 dir.addAll(files)
             }
-            if (rootDirectory.path != Environment.getExternalStorageDirectory().path)
+            if (rootDirectory.path != absoluteRoot.path)
                 dir.add(0, Item(
                         type = Item.TYPE_DIR,
-                        title = "..",
+                        title = "...",
                         subTitle = context.resources.getString(R.string.parent_directory),
                         date = "",
                         path = rootDirectory.parent,
-                        imageDrawableId = R.drawable.ic_arrow_upward_black))
+                        imageDrawableId = R.drawable.ic_arrow_up_black))
             adapter = FilesAdapter(context, R.layout.file_item, dir)
             listView.adapter = adapter
         }
@@ -117,7 +123,7 @@ class FileExplorer (
 
     fun exploreUp(): Boolean {
         val condition = currentDir.path != Environment.getExternalStorageDirectory().path
-        if (condition) explore(File(currentDir.parent))
+        if (condition) explore(absoluteRoot, File(currentDir.parent))
         return condition
     }
 
@@ -151,7 +157,7 @@ class FileExplorer (
                         val file = File("$currentDir/${filename.text}")
                         if (!file.isDirectory) {
                             file.mkdir()
-                            explore(currentDir)
+                            explore(absoluteRoot, currentDir)
                         } else
                             createDirectory.error()
                     }
