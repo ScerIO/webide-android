@@ -1,4 +1,4 @@
-package io.sker.phpide.home.fragments
+package io.sker.webide.home.fragments
 
 import android.support.v4.app.Fragment
 

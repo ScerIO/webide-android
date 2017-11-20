@@ -1,4 +1,4 @@
-package io.sker.phpide.home.fragments.project
+package io.sker.webide.home.fragments.project
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -11,12 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import io.sker.fileexplorer.FileExplorer
 import io.sker.fileexplorer.FileExplorerDialogFragment
-import io.sker.phpide.R
-import io.sker.phpide.util.JSONConfig
+import io.sker.webide.R
+import io.sker.webide.util.JSONConfig
 import io.sker.ui.TabDialog
 import org.json.JSONException
 import java.io.File
-import io.sker.phpide.project.controllers.Project as ProjectController
+import io.sker.webide.project.controllers.Project as ProjectController
 
 /**
  * Создание нового проекта

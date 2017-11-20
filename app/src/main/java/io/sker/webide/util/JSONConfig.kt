@@ -1,4 +1,4 @@
-package io.sker.phpide.util
+package io.sker.webide.util
 
 import org.json.JSONArray
 import org.json.JSONObject

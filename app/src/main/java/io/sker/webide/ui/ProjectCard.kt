@@ -1,4 +1,4 @@
-package io.sker.phpide.ui
+package io.sker.webide.ui
 
 import android.content.Context
 import android.graphics.Color
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import io.sker.phpide.R
-import io.sker.phpide.project.models.Project as ProjectModel
+import io.sker.webide.R
+import io.sker.webide.project.models.Project as ProjectModel
 
 /**
  * Карта проекта
@@ -18,7 +18,7 @@ class ProjectCard(context: Context) : LinearLayout(context) {
     private var title: String? = null
     private var version: String? = null
     private var description: String? = null
-    private var projectInfo: io.sker.phpide.project.models.Project? = null
+    private var projectInfo: io.sker.webide.project.models.Project? = null
     private var onRemoveClickListener: OnClickListener? = null
     private var onOpenClickListener: OnClickListener? = null
 

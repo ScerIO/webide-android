@@ -1,4 +1,4 @@
-package io.sker.phpide.home.fragments
+package io.sker.webide.home.fragments
 
 import android.Manifest
 import android.content.Intent
@@ -10,18 +10,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import io.sker.phpide.Editor
-import io.sker.phpide.R
-import io.sker.phpide.home.fragments.project.Create
-import io.sker.phpide.home.fragments.project.Open
-import io.sker.phpide.project.PrimitiveEvents
-import io.sker.phpide.ui.ProjectCard
-import io.sker.phpide.util.checkPermissions
+import io.sker.webide.Editor
+import io.sker.webide.R
+import io.sker.webide.home.fragments.project.Create
+import io.sker.webide.home.fragments.project.Open
+import io.sker.webide.project.PrimitiveEvents
+import io.sker.webide.ui.ProjectCard
+import io.sker.webide.util.checkPermissions
 import io.sker.ui.TabDialog
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import io.sker.phpide.project.controllers.Project as ProjectController
+import io.sker.webide.project.controllers.Project as ProjectController
 
 /**
  *

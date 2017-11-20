@@ -1,6 +1,6 @@
-package io.sker.phpide.project.models
+package io.sker.webide.project.models
 
-import io.sker.phpide.util.JSONConfig
+import io.sker.webide.util.JSONConfig
 import java.io.File
 
 class Project (configFilePath: String) {

@@ -1,4 +1,4 @@
-package io.sker.phpide.util
+package io.sker.webide.util
 
 import android.Manifest
 import android.content.Context

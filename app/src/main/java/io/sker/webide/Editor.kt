@@ -1,4 +1,4 @@
-package io.sker.phpide
+package io.sker.webide
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -14,7 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import io.sker.fileexplorer.FileExplorer
 import io.sker.fileexplorer.FilesExplorerView
-import io.sker.phpide.util.getStatusBarHeight
+import io.sker.webide.util.getStatusBarHeight
 import java.io.File
 
 class Editor : AppCompatActivity() {

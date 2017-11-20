@@ -1,4 +1,4 @@
-package io.sker.phpide;
+package io.sker.webide;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
