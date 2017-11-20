@@ -2,21 +2,21 @@ package io.sker.phpide.home.fragments.project
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import io.sker.fileexplorer.FileExplorer
 import io.sker.fileexplorer.FileExplorerDialogFragment
 import io.sker.phpide.R
 import io.sker.phpide.util.JSONConfig
-import io.sker.phpide.project.controllers.Project as  ProjectController
 import io.sker.ui.TabDialog
 import org.json.JSONException
 import java.io.File
+import io.sker.phpide.project.controllers.Project as ProjectController
 
 /**
  * Создание нового проекта
@@ -28,7 +28,7 @@ class Create : TabDialog.TabDialogFragment() {
     private lateinit var title: EditText
     private lateinit var version: EditText
     private lateinit var description: EditText
-    private lateinit var selectedDirPath: AppCompatTextView
+    private lateinit var selectedDirPath: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.add_project, container, false)
@@ -44,7 +44,7 @@ class Create : TabDialog.TabDialogFragment() {
     }
 
     private fun selectDir() {
-        if (fragmentManager.findFragmentByTag("CREATE_PROJECT_FILE_EXPLORER") == null)
+        if (fragmentManager!!.findFragmentByTag("CREATE_PROJECT_FILE_EXPLORER") == null)
             FileExplorerDialogFragment()
                     .setMode(FileExplorer.MODE_DIR)
                     .setResultListener { patch, dialog ->
@@ -95,7 +95,7 @@ class Create : TabDialog.TabDialogFragment() {
                     .put("version", version)
                     .put("description", description)
                     .commit()
-            ProjectController(context).addProjectToList(configFile.absolutePath)
+            ProjectController(context!!).addProjectToList(configFile.absolutePath)
         } catch (e: Exception) {
             when(e) {
                 is JSONException -> {

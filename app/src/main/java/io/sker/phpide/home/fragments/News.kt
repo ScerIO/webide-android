@@ -15,14 +15,14 @@ class News : TagFragment() {
         val view = inflater.inflate(R.layout.fragment_news, container, false)
 
         val news = view.findViewById<LinearLayout>(R.id.layout)
-        val news1 = NewsCard(context)
+        val news1 = NewsCard(context!!)
         news1
                 .setTitle("Test news title 1")
                 .setDescription("Test news description 1")
                 .build()
         news.addView(news1)
 
-        val news2 = NewsCard(context)
+        val news2 = NewsCard(context!!)
         news2
                 .setTitle("Test title 2")
                 .setDescription("Test description Test description Test description Test description " +

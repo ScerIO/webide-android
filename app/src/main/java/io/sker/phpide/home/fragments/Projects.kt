@@ -50,10 +50,10 @@ class Projects : TagFragment() {
 
     private lateinit var projects: LinearLayout
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_projects, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_projects, container, false)
         projects = view.findViewById(R.id.layout)
-        projectController = ProjectController(context)
+        projectController = ProjectController(context!!)
 
         if (tabs.count() < 2 ) {
             val create = childFragmentManager.findFragmentByTag(FRAGMENT_TAG_CREATE) as TabDialog.TabDialogFragment? ?: Create()
@@ -66,7 +66,7 @@ class Projects : TagFragment() {
         val fab = view!!.findViewById<FloatingActionButton>(R.id.add_project)
         fab.setOnClickListener {
             val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            val checkPermissionResponses = checkPermissions(context, permissions)
+            val checkPermissionResponses = checkPermissions(context!!, permissions)
             if (checkPermissionResponses[0] or checkPermissionResponses[1] != PackageManager.PERMISSION_GRANTED)
                 requestPermissions(permissions, REQUEST_PERMISSIONS_CREATE_PROJECT)
             else
@@ -95,7 +95,7 @@ class Projects : TagFragment() {
 
     private fun updateProjects () {
         for (project in projectController.allProjects) {
-            val projectView = ProjectCard(context)
+            val projectView = ProjectCard(context!!)
             projectView
                     .setTitle(project.config!!.get("title") as String)
                     .setVersion(project.config!!.get("version") as String)

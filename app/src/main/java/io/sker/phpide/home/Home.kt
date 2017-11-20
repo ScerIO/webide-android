@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import io.sker.phpide.R
 import io.sker.phpide.home.fragments.News
 import io.sker.phpide.home.fragments.Projects
 import io.sker.phpide.home.fragments.TagFragment
 import io.sker.phpide.home.fragments.Tools
-import io.sker.phpide.util.getStatusBarHeight
 
 class Home : AppCompatActivity() {
 

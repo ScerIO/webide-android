@@ -18,10 +18,10 @@ import io.sker.phpide.project.controllers.Project as ProjectController
  */
 class Open : TabDialog.TabDialogFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = RelativeLayout(context)
-        val projectController = ProjectController(context)
-        val explorer = FilesExplorerView(context)
+        val projectController = ProjectController(context!!)
+        val explorer = FilesExplorerView(context!!)
                 .setMode(FileExplorer.MODE_FILE)
                 .setVisibleExtensions(arrayOf("phpide"))
                 .setResultListener { patch, _ ->

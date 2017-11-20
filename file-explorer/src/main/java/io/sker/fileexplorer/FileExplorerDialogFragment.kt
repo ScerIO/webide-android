@@ -52,8 +52,8 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 2)
+        if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 2)
     }
 
     /**
@@ -76,7 +76,7 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
             override fun error() = Snackbar.make(view, R.string.error_creating_dir, Snackbar.LENGTH_LONG).show()
         }
         explorer = FileExplorer(
-                context = context,
+                context = context!!,
                 createDirectory = createDirectory,
                 listView = listView,
                 mode = mode,

@@ -22,7 +22,7 @@ class TabDialog : DialogFragment() {
 
     private var tabs: List<Tab>? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val context = context
 
         val view = LinearLayout(context)
@@ -34,7 +34,7 @@ class TabDialog : DialogFragment() {
         val viewPagerParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0)
         viewPagerParams.weight = 1.0f
 
-        viewPager = ViewPager(context)
+        viewPager = ViewPager(context!!)
         viewPager.id = R.id.tab_dialog_viewpager
         viewPager.layoutParams = viewPagerParams
         view.addView(viewPager)
