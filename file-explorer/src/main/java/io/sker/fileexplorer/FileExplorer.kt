@@ -68,7 +68,7 @@ class FileExplorer (
         try {
             for (file in dirs) {
                 val lastModDate = Date(file.lastModified())
-                val date = DateFormat.format("dd-MM-yyyy HH:mm", lastModDate).toString()
+                val date = DateFormat.format("dd.MM.yyyy HH:mm", lastModDate).toString()
                 if (file.isDirectory) {
                     val listFiles = file.listFiles()
                     dir.add(Item(
