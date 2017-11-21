@@ -1,4 +1,4 @@
-package io.sker.webide.home.fragments.project
+package io.sker.ide.home.fragments.project
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -11,12 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import io.sker.fileexplorer.FileExplorer
 import io.sker.fileexplorer.FileExplorerDialogFragment
-import io.sker.webide.R
-import io.sker.webide.util.JSONConfig
+import io.sker.ide.R
+import io.sker.ide.util.JSONConfig
 import io.sker.ui.TabDialog
 import org.json.JSONException
 import java.io.File
-import io.sker.webide.project.controllers.Project as ProjectController
+import io.sker.ide.project.controllers.Project as ProjectController
 
 /**
  * Создание нового проекта

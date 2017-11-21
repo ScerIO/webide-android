@@ -1,4 +1,4 @@
-package io.sker.webide.project
+package io.sker.ide.project
 
 sealed class PrimitiveEvents {
 

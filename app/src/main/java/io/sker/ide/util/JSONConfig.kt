@@ -1,4 +1,4 @@
-package io.sker.webide.util
+package io.sker.ide.util
 
 import org.json.JSONArray
 import org.json.JSONObject

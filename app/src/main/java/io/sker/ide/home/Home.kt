@@ -1,14 +1,14 @@
-package io.sker.webide.home
+package io.sker.ide.home
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import io.sker.webide.R
-import io.sker.webide.home.fragments.News
-import io.sker.webide.home.fragments.Projects
-import io.sker.webide.home.fragments.TagFragment
-import io.sker.webide.home.fragments.Tools
+import io.sker.ide.R
+import io.sker.ide.home.fragments.News
+import io.sker.ide.home.fragments.Projects
+import io.sker.ide.home.fragments.TagFragment
+import io.sker.ide.home.fragments.Tools
 
 class Home : AppCompatActivity() {
 

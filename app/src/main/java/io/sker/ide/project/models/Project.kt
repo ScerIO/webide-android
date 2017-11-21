@@ -1,6 +1,6 @@
-package io.sker.webide.project.models
+package io.sker.ide.project.models
 
-import io.sker.webide.util.JSONConfig
+import io.sker.ide.util.JSONConfig
 import java.io.File
 
 class Project (configFilePath: String) {

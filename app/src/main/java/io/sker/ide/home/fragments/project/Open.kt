@@ -1,4 +1,4 @@
-package io.sker.webide.home.fragments.project
+package io.sker.ide.home.fragments.project
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import io.sker.fileexplorer.FileExplorer
 import io.sker.fileexplorer.FilesExplorerView
-import io.sker.webide.util.JSONConfig
+import io.sker.ide.util.JSONConfig
 import io.sker.ui.TabDialog
 import java.io.File
-import io.sker.webide.project.controllers.Project as ProjectController
+import io.sker.ide.project.controllers.Project as ProjectController
 
 /**
  * Добавление проета

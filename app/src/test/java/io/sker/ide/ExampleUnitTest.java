@@ -1,4 +1,4 @@
-package io.sker.webide;
+package io.sker.ide;
 
 import org.junit.Test;
 

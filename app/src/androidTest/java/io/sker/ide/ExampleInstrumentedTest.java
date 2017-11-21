@@ -1,4 +1,4 @@
-package io.sker.webide;
+package io.sker.ide;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

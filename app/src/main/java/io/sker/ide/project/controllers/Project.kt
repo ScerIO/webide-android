@@ -1,9 +1,9 @@
-package io.sker.webide.project.controllers
+package io.sker.ide.project.controllers
 
 import android.content.Context
-import io.sker.webide.project.PrimitiveEvents
-import io.sker.webide.util.JSONConfig
-import io.sker.webide.project.models.Project as ProjectModel
+import io.sker.ide.project.PrimitiveEvents
+import io.sker.ide.util.JSONConfig
+import io.sker.ide.project.models.Project as ProjectModel
 import org.greenrobot.eventbus.EventBus
 import java.io.File
 

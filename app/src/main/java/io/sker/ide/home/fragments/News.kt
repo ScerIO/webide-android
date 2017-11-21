@@ -1,11 +1,11 @@
-package io.sker.webide.home.fragments
+package io.sker.ide.home.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import io.sker.webide.R
+import io.sker.ide.R
 import io.sker.ui.NewsCard
 
 

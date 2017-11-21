@@ -187,7 +187,7 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
      * *
      * @return instance
      */
-    fun setResultListener(resultListener: (patch: String, explorer: FileExplorer.IExplorer) -> Unit): FilesExplorerView {
+    fun setResultListener(resultListener: (path: String, explorer: FileExplorer.IExplorer) -> Unit): FilesExplorerView {
         this.resultListener = resultListener
         return this
     }

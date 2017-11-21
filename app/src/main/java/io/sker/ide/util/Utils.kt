@@ -1,4 +1,4 @@
-package io.sker.webide.util
+package io.sker.ide.util
 
 import android.Manifest
 import android.content.Context
