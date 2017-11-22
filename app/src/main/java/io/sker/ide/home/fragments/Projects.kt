@@ -10,8 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import io.sker.ide.editor.Editor
 import io.sker.ide.R
+import io.sker.ide.editor.Editor
 import io.sker.ide.home.fragments.project.Create
 import io.sker.ide.home.fragments.project.Open
 import io.sker.ide.project.PrimitiveEvents
@@ -94,7 +94,14 @@ class Projects : TagFragment() {
     }
 
     private fun updateProjects () {
+        projects.removeAllViews()
         for (project in projectController.allProjects) {
+            if (project.config == null) {
+                projectController.allProjects.remove(project)
+                projectController.removeProjectFromList(path = project.configFile.path)
+                continue
+            }
+
             val projectView = ProjectCard(context!!)
             projectView
                     .setTitle(project.config!!.get("title") as String)
