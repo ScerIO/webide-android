@@ -1,1 +1,1 @@
-include ':app', ':file-explorer', ':ui'
+include ':app', ':file-explorer', ':ui', ':code-editor'

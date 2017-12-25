@@ -16,4 +16,5 @@
     <string name="title_projects">Projects</string>
     <string name="title_news">News</string>
     <string name="title_tools">Tools</string>
+    <string name="title_activity_news">News</string>
 </resources>

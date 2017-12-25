@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
         <activity
-            android:name="io.sker.ide.home.Home"
+            android:name=".home.Home"
             android:theme="@style/HomeTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +25,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="io.sker.ide.editor.Editor"
+            android:name=".editor.Editor"
             android:label="@string/app_name"
             android:theme="@style/EditorTheme" />
+        <activity
+            android:name=".news.News"
+            android:label="@string/title_activity_news"
+            android:theme="@style/NewsTheme"/>
     </application>
 
 </manifest>

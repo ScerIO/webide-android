@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.CardView
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -23,6 +24,9 @@ class NewsCard(context: Context) : LinearLayout(context) {
     private var title: String? = null
     private var description: String? = null
     private var link: String? = null
+    private var onClickReadMore: (view: View) -> Unit? = {}
+
+    private lateinit var imageView: ImageView
 
     fun setImage(image: String): NewsCard {
         this.image = image
@@ -44,6 +48,11 @@ class NewsCard(context: Context) : LinearLayout(context) {
         return this
     }
 
+    fun setOnClickReadMore (onClickReadMore: (view: View) -> Unit): NewsCard  {
+        this.onClickReadMore = onClickReadMore
+        return this
+    }
+
     fun build() {
         this.setBackgroundColor(Color.TRANSPARENT)
         View.inflate(context, R.layout.news_card, this)
@@ -54,16 +63,29 @@ class NewsCard(context: Context) : LinearLayout(context) {
         val deviceWidth = displayMetrics.widthPixels
         this.layoutParams = ViewGroup.LayoutParams(deviceWidth, ViewGroup.LayoutParams.WRAP_CONTENT)
         val cardView = findViewById<CardView>(R.id.card)
-        val imageView = findViewById<ImageView>(R.id.image)
-        Picasso.with(context).load(R.drawable.test).into(imageView)
+        this.imageView = findViewById<ImageView>(R.id.image)
         val titleView = findViewById<TextView>(R.id.title)
         val descriptionView = findViewById<TextView>(R.id.description)
         val shareView = findViewById<Button>(R.id.share)
         val readMoreView = findViewById<Button>(R.id.read_more)
 
+        readMoreView.setOnClickListener { this.onClickReadMore(it) }
+
         titleView.text = this.title ?: ""
         descriptionView.text = this.description ?: ""
 
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        Log.e("width", imageView.width.toString())
+        Log.e("height", imageView.height.toString())
+        Picasso
+            .with(context)
+            .load(R.drawable.test)
+            //.resize(this.imageView.width, this.imageView.height)
+            .fit()
+            .into(imageView)
     }
 
 }

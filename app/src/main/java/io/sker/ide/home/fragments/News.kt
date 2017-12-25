@@ -1,11 +1,14 @@
 package io.sker.ide.home.fragments
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import io.sker.ide.R
+import io.sker.ide.news.News
 import io.sker.ui.NewsCard
 
 
@@ -19,6 +22,11 @@ class News : TagFragment() {
         news1
                 .setTitle("Test news title 1")
                 .setDescription("Test news description 1")
+                .setOnClickReadMore({
+                    val intent = Intent(context, News::class.java)
+                    //intent.putExtra("CONFIG_PATH", project.configFile.parent)
+                    startActivity(intent)
+                })
                 .build()
         news.addView(news1)
 
