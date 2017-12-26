@@ -1,4 +1,4 @@
-package com.scorpiodev.codeeditor.listeners
+package io.sker.codeeditor.listeners
 
 interface OnScrollListener {
     fun onScrolled()

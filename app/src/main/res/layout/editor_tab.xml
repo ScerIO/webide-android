@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="io.sker.codeeditor.CodeEditorActivity">
+    android:layout_height="match_parent">
 
     <io.sker.codeeditor.CodeEditor
-        android:text="Welcome to Kodis!"
+        android:id="@+id/code_editor"
+        android:text="Welcome to Editor!"
         android:background="@android:color/transparent"
         android:textSize="15sp"
         android:textColor="@color/textColor"

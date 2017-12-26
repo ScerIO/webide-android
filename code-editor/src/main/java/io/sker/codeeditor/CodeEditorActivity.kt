@@ -1,14 +1,11 @@
-package com.scorpiodev.codeeditor
+package io.sker.codeeditor
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 
-import kotlinx.android.synthetic.main.activity_code_editor.*
-
-class CodeEditor : AppCompatActivity() {
+class CodeEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

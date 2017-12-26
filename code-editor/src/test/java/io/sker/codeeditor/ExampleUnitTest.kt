@@ -1,4 +1,4 @@
-package com.scorpiodev.codeeditor
+package io.sker.codeeditor
 
 import org.junit.Test
 

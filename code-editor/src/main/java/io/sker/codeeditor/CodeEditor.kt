@@ -1,4 +1,4 @@
-package com.scorpiodev.codeeditor
+package io.sker.codeeditor
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,15 +11,15 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.ReplacementSpan
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
-import android.widget.AbsListView
 import android.widget.TextView
-import com.scorpiodev.codeeditor.listeners.OnBottomReachedListener
-import com.scorpiodev.codeeditor.listeners.OnScrollListener
+import io.sker.codeeditor.R.*
+import io.sker.codeeditor.listeners.OnScrollListener
 import java.lang.IllegalStateException
 import java.util.regex.Pattern
 
-open class ShaderEditor : AppCompatEditText {
+open class CodeEditor : AppCompatEditText {
 
     private val updateHandler = Handler()
     private val updateRunnable = Runnable {
@@ -61,19 +61,7 @@ open class ShaderEditor : AppCompatEditText {
         init(context)
     }
 
-    fun setOnTextChangedListener(listener: OnTextChangedListener) {
-        onTextChangedListener = listener
-    }
-
-    fun setUpdateDelay(ms: Int) {
-        updateDelay = ms
-    }
-
     fun hasErrorLine(): Boolean = errorLine > 0
-
-    fun setErrorLine(line: Int) {
-        errorLine = line
-    }
 
     fun updateHighlighting() {
         highlightWithoutChange(text)
@@ -179,72 +167,70 @@ open class ShaderEditor : AppCompatEditText {
     private val CHUNK = 20000
     private var FILE_CONTENT: String? = null
     private var currentBuffer: String? = null
-    private lateinit var loaded: StringBuilder
+    private var loaded: StringBuilder = StringBuilder()
 
-    private var onBottomReachedListener: OnBottomReachedListener? = null
+    private var onTopReachedListener: () -> Unit = {}
+    private var onBottomReachedListener: () -> Unit = {}
     private var onScrollListener: OnScrollListener? = null
 
     override fun setText(text: CharSequence?, type: BufferType?) {
+        if (text.isNullOrBlank()) return
         super.setText(text, type)
-        // TODO Add support chank load
+        // TODO Add support chunk load
     }
 
     fun setText(text: String?) {
         if (text.isNullOrBlank()) return
-        // TODO Add support chank load
-
+        // TODO Add support chunk load
+        this.loadInChunks(text!!)
     }
 
-    // TODO Add support chank load
+    // TODO Add support chunk load
     private fun loadInChunks(bigString: String) {
         loaded.append(bigString.substring(0, CHUNK))
         setTextHighlighted(loaded)
 
-        this.setOnBottomReachedListener(object : OnBottomReachedListener {
-            override fun onBottomReached() {
-                when {
-                    loaded.length >= bigString.length -> return
-                    loaded.length + CHUNK > bigString.length -> {
-                        //String buffer = bigString.substring(loaded.length(), bigString.length());
-                        val buffer = bigString.substring(loaded.length, bigString.length)
-                        loaded.replace(0, loaded.length, buffer)
-                    }
-                    else -> {
-                        val buffer = bigString.substring(loaded.length, loaded.length + CHUNK)
-                        loaded.replace(0, loaded.length, buffer)
-                    }
+        this.onBottomReachedListener = onBottomReachedListener@ {
+            when {
+                loaded.length >= bigString.length -> return@onBottomReachedListener
+                loaded.length + CHUNK > bigString.length -> {
+                    //String buffer = bigString.substring(loaded.length(), bigString.length());
+                    val buffer = bigString.substring(loaded.length, bigString.length)
+                    loaded.replace(0, loaded.length, buffer)
                 }
-
-                setTextHighlighted(loaded)
+                else -> {
+                    val buffer = bigString.substring(loaded.length, loaded.length + CHUNK)
+                    loaded.replace(0, loaded.length, buffer)
+                }
             }
-        })
+
+            setTextHighlighted(loaded)
+        }
+
+        /*
+        this.onTopReachedListener = {
+
+        }*/
     }
 
     override fun onScrollChanged(l:Int, t:Int, oldl:Int, oldt:Int) {
-        if (onScrollListener == null || onBottomReachedListener == null) return
+        if (onScrollListener == null) return
         onScrollListener!!.onScrolled()
+        Log.v("ScrollR", "Scroll")
         if (t > oldt)
             onScrollListener!!.onScrolledDown()
         else
             onScrollListener!!.onScrolledUp()
         val diff = (this.bottom - (height + scrollY))
-        if (diff <= 20)
-        {
-            onBottomReachedListener!!.onBottomReached()
+
+        if ( diff == t ) {
+            Log.v("ScrollR", "On top reached")
+            onTopReachedListener()
+        } else if (diff <= 20) {
+            Log.v("ScrollR", "On bottom reached")
+            onBottomReachedListener()
         }
         super.onScrollChanged(l, t, oldl, oldt)
-    }
-
-    fun getOnBottomReachedListener(): OnBottomReachedListener = onBottomReachedListener!!
-
-    private fun setOnBottomReachedListener(onBottomReachedListener: OnBottomReachedListener) {
-        this.onBottomReachedListener = onBottomReachedListener
-    }
-
-    fun getOnScrollListener(): OnScrollListener = onScrollListener!!
-
-    fun setOnScrollListener(onScrollListener: OnScrollListener) {
-        this.onScrollListener = onScrollListener
     }
 
     private fun init(context: Context) {
@@ -305,19 +291,19 @@ open class ShaderEditor : AppCompatEditText {
     private fun setSyntaxColors(context: Context) {
         colorError = ContextCompat.getColor(
                 context,
-                R.color.syntax_error)
+                color.syntax_error)
         colorNumber = ContextCompat.getColor(
                 context,
-                R.color.syntax_number)
+                color.syntax_number)
         colorKeyword = ContextCompat.getColor(
                 context,
-                R.color.syntax_keyword)
+                color.syntax_keyword)
         colorBuiltin = ContextCompat.getColor(
                 context,
-                R.color.syntax_builtin)
+                color.syntax_builtin)
         colorComment = ContextCompat.getColor(
                 context,
-                R.color.syntax_comment)
+                color.syntax_comment)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -579,19 +565,20 @@ open class ShaderEditor : AppCompatEditText {
                 "^[\t ]*(#define|#undef|#if|#ifdef|#ifndef|#else|#elif|#endif|" + "#error|#pragma|#extension|#version|#line)\\b",
                 Pattern.MULTILINE)
         private val PATTERN_KEYWORDS = Pattern.compile(
-                "\\b(attribute|const|uniform|varying|break|continue|" +
-                        "do|for|while|if|else|in|out|inout|float|int|void|bool|true|false|" +
-                        "lowp|mediump|highp|precision|invariant|discard|return|mat2|mat3|" +
-                        "mat4|vec2|vec3|vec4|ivec2|ivec3|ivec4|bvec2|bvec3|bvec4|sampler2D|" +
-                        "samplerCube|struct|gl_Vertex|gl_FragCoord|gl_FragColor)\\b")
+                "\\b(const|break|continue|Date|Math" +
+                        "do|for|while|if|else|in|out|this|" +
+                        "Int|int|String|string|Boolean|boolean|Float|float|Object|object|Void|void|Array|array|Null|null|" +
+                        "return|function|var|Math|Object|default|case|Array)\\b")
         private val PATTERN_BUILTINS = Pattern.compile(
-                "\\b(radians|degrees|sin|cos|tan|asin|acos|atan|pow|" +
-                        "exp|log|exp2|log2|sqrt|inversesqrt|abs|sign|floor|ceil|fract|mod|" +
-                        "min|max|clamp|mix|step|smoothstep|length|distance|dot|cross|" +
-                        "normalize|faceforward|reflect|refract|matrixCompMult|lessThan|" +
-                        "lessThanEqual|greaterThan|greaterThanEqual|equal|notEqual|any|all|" +
-                        "not|dFdx|dFdy|fwidth|texture2D|texture2DProj|texture2DLod|" +
-                        "texture2DProjLod|textureCube|textureCubeLod)\\b")
+                "\\b(catch|try|sin|cos|log|sqrt|abs|floor|ceil|PI|length|equal|exec|find|next|" +
+                        "pocketmine|Block|Entity|Item|Player|Server|Level|new|match|" +
+                        "ArmorType|switch|pop|push|shift|sort|unshift|reverse|splice|concat|indexOf|join|lastIndexOf|slice|" +
+                        "toSource|toString|getText|valueOf|filter|every|map|some|foreach|acos|asin|atan|atan2|" +
+                        "max|min|random|round|exp|pow|tan|charAt|charCodeAt|replace|search|split|toLocaleTimeString|" +
+                        "toLowerCase|toUpperCase|eval|parseFloat|append|toArray|replaceAll|toPrecision|toUTCString|" +
+                        "toLocaleString|toExponential|toFixed|substring|substr|" +
+                        "php|echo|class|abstract|struct|namespace|use|public|private|protected|" +
+                        "caller|apply|constructor|arity|call|arguments|toLocaleDateString)\\b")
         private val PATTERN_COMMENTS = Pattern.compile(
                 "/\\*(?:.|[\\n\\r])*?\\*/|//.*")
         private val PATTERN_TRAILING_WHITE_SPACE = Pattern.compile(

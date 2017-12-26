@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "26.0.2"
+    buildToolsVersion "27.0.1"
     defaultConfig {
         applicationId "io.scer.ide"
         minSdkVersion 17
@@ -34,6 +34,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile project(path: ':ui')
     compile project(path: ':file-explorer')
+    compile project(path: ':code-editor')
     compile "com.android.support:design:$android_libraries_version"
     compile "com.android.support:support-vector-drawable:$android_libraries_version"
     compile "com.android.support:appcompat-v7:$android_libraries_version"

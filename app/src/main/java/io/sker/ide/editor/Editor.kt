@@ -54,7 +54,6 @@ class Editor : AppCompatActivity() {
                 .setRootDir(File(configPath))
                 .showAddDirButton(true)
                 .setResultListener { path, _ ->
-                    Log.e("Editor", "onResultExplorer")
                     if (tabView.visibility  != View.VISIBLE)
                         tabView.visibility = View.VISIBLE
 
