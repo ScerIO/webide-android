@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<io.sker.codeeditor.components.InteractiveScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.sker.codeeditor.CodeEditorActivity">
+    android:paddingStart="16dp"
+    android:paddingEnd="0dp"
+    android:layout_marginBottom="50dp">
 
-    <io.sker.codeeditor.CodeEditor
+    <io.sker.codeeditor.components.CodeEditor
+        android:id="@+id/code_editor"
         android:text="Welcome to Kodis!"
         android:background="@android:color/transparent"
         android:textSize="15sp"
+        android:focusable="false"
         android:textColor="@color/textColor"
         android:imeOptions="flagNoExtractUi"
         android:inputType="textVisiblePassword|textMultiLine"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</LinearLayout>
+</io.sker.codeeditor.components.InteractiveScrollView>
