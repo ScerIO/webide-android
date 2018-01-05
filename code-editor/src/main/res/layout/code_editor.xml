@@ -8,7 +8,7 @@
     android:paddingEnd="0dp"
     android:layout_marginBottom="50dp">
 
-    <io.sker.codeeditor.components.CodeEditor
+    <io.sker.codeeditor.components.CodeEditorLineNumbers
         android:id="@+id/code_editor"
         android:text="Welcome to Kodis!"
         android:background="@android:color/transparent"

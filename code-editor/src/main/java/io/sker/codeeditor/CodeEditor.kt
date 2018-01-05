@@ -3,26 +3,13 @@ package io.sker.codeeditor
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
-import io.sker.codeeditor.components.CodeEditor
+import io.sker.codeeditor.components.CodeEditorLineNumbers
 import io.sker.codeeditor.components.InteractiveScrollView
+import io.sker.codeeditor.enums.DocumentLoad
 import io.sker.codeeditor.listeners.OnScrollReachedListener
-
-/**
- * Load full code or load by chunks
- */
-enum class DocumentLoad {
-    /**
-     * Loaded full
-     */
-    FULL,
-    /**
-     * Loaded by chunks
-     */
-    CHUNKS
-}
 
 /**
  * Code editor view
@@ -39,7 +26,7 @@ class NCodeEditor : LinearLayout {
     /**
      * Code editor (Custom EditText)
      */
-    private lateinit var codeEditor: CodeEditor
+    private lateinit var codeEditor: CodeEditorLineNumbers
     /**
      * Already load symbols
      */
@@ -80,6 +67,13 @@ class NCodeEditor : LinearLayout {
         this.addView(this.view)
     }
 
+    var startLineNumber: Int = 0
+        set(value) {
+            codeEditor.startLineNumber = value
+        }
+
+    private var lastLinesCount: Int =  0
+
     /**
      * Load full file or load by chunks
      * *
@@ -113,7 +107,10 @@ class NCodeEditor : LinearLayout {
      * @param codeText
      */
     private fun loadInChunks(codeText: String) {
-        this.loaded.append(codeText.substring(0, CHUNK))
+        val firstBuffer = codeText.substring(0, CHUNK)
+        this.loaded.append(firstBuffer)
+        lastLinesCount = firstBuffer.lines().count()
+
         this.codeEditor.setTextHighlighted(this.loaded)
         var lastLength = this.loaded.length
 
@@ -124,11 +121,15 @@ class NCodeEditor : LinearLayout {
                     (lastLength + CHUNK > codeText.length) -> {
                         val buffer = codeText.substring(lastLength, codeText.length)
                         loaded.replace(0, loaded.length, buffer)
+                        startLineNumber = lastLinesCount - 1
+                        lastLinesCount = buffer.lines().count()
                         codeText.length
                     }
                     else -> {
                         val buffer = codeText.substring(lastLength, lastLength + CHUNK)
                         loaded.replace(0, loaded.length, buffer)
+                        startLineNumber = lastLinesCount - 1
+                        lastLinesCount = buffer.lines().count()
                         lastLength + CHUNK
                     }
                 }

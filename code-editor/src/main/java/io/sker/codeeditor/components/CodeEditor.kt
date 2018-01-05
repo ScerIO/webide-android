@@ -53,13 +53,9 @@ open class CodeEditor : AppCompatEditText {
         fun onTextChanged(text: String)
     }
 
-    constructor(context: Context) : super(context) {
-        init(context)
-    }
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context)
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     fun hasErrorLine(): Boolean = errorLine > 0
 
@@ -84,16 +80,6 @@ open class CodeEditor : AppCompatEditText {
         if (onTextChangedListener != null) {
             onTextChangedListener!!.onTextChanged(text.toString())
         }
-    }
-
-    private fun getDigitCount(): Int {
-        var count = 0
-        var len = lineCount
-        while (len > 0) {
-            count++
-            len /= 10
-        }
-        return count
     }
 
     fun addUniform(statement: String?) {
@@ -164,10 +150,8 @@ open class CodeEditor : AppCompatEditText {
         return idx
     }
 
-    private fun init(context: Context) {
-        setHorizontallyScrolling(true)
-
-        viewTreeObserver.addOnGlobalLayoutListener { editorLayout = layout }
+    init {
+        this.setHorizontallyScrolling(true)
 
         filters = arrayOf(InputFilter { source, start, end, dest, dstart, dend ->
             if (modified &&
@@ -235,29 +219,6 @@ open class CodeEditor : AppCompatEditText {
         colorComment = ContextCompat.getColor(
                 context,
                 color.syntax_comment)
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        val padding = getPixels(getDigitCount() * 10 + 10).toInt()
-        setPadding(padding, 0, 0, 0)
-
-        val firstLine = editorLayout.getLineForVertical(scrollY)
-        val lastLine: Int = try {
-            editorLayout.getLineForVertical(scrollY + (height - extendedPaddingTop - extendedPaddingBottom))
-        } catch (npe: NullPointerException) {
-            editorLayout.getLineForVertical(scrollY + (height - paddingTop - paddingBottom))
-        }
-
-        //the y position starts at the baseline of the first line
-        var positionY = baseline + (editorLayout.getLineBaseline(firstLine) - editorLayout.getLineBaseline(0))
-        drawLineNumber(canvas, editorLayout, positionY, firstLine)
-        for (i in firstLine + 1..lastLine) {
-            //get the next y position using the difference between the current and last baseline
-            positionY += editorLayout.getLineBaseline(i) - editorLayout.getLineBaseline(i - 1)
-            drawLineNumber(canvas, editorLayout, positionY, i)
-        }
-
-        super.onDraw(canvas)
     }
 
     private fun cancelUpdate() {
@@ -477,14 +438,6 @@ open class CodeEditor : AppCompatEditText {
                 bottom: Int,
                 paint: Paint) {}
     }
-
-    private fun drawLineNumber(canvas: Canvas, layout: Layout, positionY: Int, line: Int) {
-        val positionX = layout.getLineLeft(line).toInt()
-        canvas.drawText((line + 1).toString(), (positionX + computeHorizontalScrollOffset()).toFloat(), positionY.toFloat(), paint)
-    }
-
-    private fun getPixels(dp: Int): Float =
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), context.resources.displayMetrics)
 
     companion object {
 
