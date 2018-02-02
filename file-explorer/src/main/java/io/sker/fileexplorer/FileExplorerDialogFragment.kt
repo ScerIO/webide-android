@@ -46,6 +46,11 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
     private var showAddDirButton: Boolean = false
 
     /**
+     * Show update button
+     */
+    private var showUpdateButton: Boolean = true
+
+    /**
      * Callback
      */
     private var resultListener: ((patch: String, explorer: FileExplorer.IExplorer) -> Unit?)? = null
@@ -100,6 +105,12 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
             addDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }
 
+        if (showUpdateButton) {
+            val updateMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_update, Menu.NONE, "Update") // TODO Добавить текстовый ресурс
+            updateMenuItem.setIcon(R.drawable.ic_update_black)
+            updateMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
+
         if (mode == FileExplorer.MODE_DIR) {
             val selectDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_confirm, Menu.NONE, "Select dir") // TODO Добавить текстовый ресурс
             selectDirMenuItem.setIcon(ic_check_black)
@@ -114,6 +125,10 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
                     true
                 }
                 R.id.menu_add_dir -> explorer.addDirectory()
+                R.id.menu_update -> {
+                    explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
+                    true
+                }
                 else -> false
             }
         }
@@ -188,6 +203,17 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
      */
     fun showAddDirButton(show: Boolean): FileExplorerDialogFragment {
         this.showAddDirButton = show
+        return this
+    }
+
+    /**
+     * Show update button
+     * @param show - default false
+     * *
+     * @return instance
+     */
+    fun showUpdateButton(show: Boolean): FileExplorerDialogFragment {
+        this.showUpdateButton = show
         return this
     }
 
