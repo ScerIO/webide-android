@@ -10,6 +10,8 @@ import io.sker.codeeditor.components.CodeEditorLineNumbers
 import io.sker.codeeditor.components.InteractiveScrollView
 import io.sker.codeeditor.enums.DocumentLoad
 import io.sker.codeeditor.listeners.OnScrollReachedListener
+import java.util.*
+import kotlin.system.measureTimeMillis
 
 /**
  * Code editor view
@@ -67,12 +69,13 @@ class NCodeEditor : LinearLayout {
         this.addView(this.view)
     }
 
-    var startLineNumber: Int = 0
+    var startLineNumber: Int
         set(value) {
             codeEditor.startLineNumber = value
         }
+        get() = codeEditor.startLineNumber
 
-    private var lastLinesCount: Int =  0
+    private var lastLinesCount: Int =  1
 
     /**
      * Load full file or load by chunks
@@ -102,17 +105,21 @@ class NCodeEditor : LinearLayout {
 
     /**
      * Load code by chunks
-     * TODO: Add support chunk load
+     * TODO: Fix number lines on second fragment
+     * TODO: Smooth code loading
      * *
      * @param codeText
      */
     private fun loadInChunks(codeText: String) {
         val firstBuffer = codeText.substring(0, CHUNK)
         this.loaded.append(firstBuffer)
-        lastLinesCount = firstBuffer.lines().count()
+        lastLinesCount = this.getLinesCountFromString(firstBuffer)
+        startLineNumber = 1
 
         this.codeEditor.setTextHighlighted(this.loaded)
         var lastLength = this.loaded.length
+        val linesController = Stack<Int>()
+        linesController.push(loaded.lines().count())
 
         this.scrollView.setOnScrollReachedListener(object : OnScrollReachedListener {
             override fun onBottomReached(callback: () -> Unit) {
@@ -120,16 +127,18 @@ class NCodeEditor : LinearLayout {
                     (lastLength >= codeText.length) -> return@onBottomReached
                     (lastLength + CHUNK > codeText.length) -> {
                         val buffer = codeText.substring(lastLength, codeText.length)
-                        loaded.replace(0, loaded.length, buffer)
-                        startLineNumber = lastLinesCount - 1
-                        lastLinesCount = buffer.lines().count()
+                        val linesCount = getLinesCountFromString(loaded.toString())
+                        startLineNumber += linesCount
+                        linesController.push(linesCount)
+                        loaded.replace(0, CHUNK, buffer)
                         codeText.length
                     }
                     else -> {
                         val buffer = codeText.substring(lastLength, lastLength + CHUNK)
-                        loaded.replace(0, loaded.length, buffer)
-                        startLineNumber = lastLinesCount - 1
-                        lastLinesCount = buffer.lines().count()
+                        val linesCount = getLinesCountFromString(loaded.toString())
+                        startLineNumber += linesCount
+                        linesController.push(linesCount)
+                        loaded.replace(0, CHUNK, buffer)
                         lastLength + CHUNK
                     }
                 }
@@ -144,12 +153,14 @@ class NCodeEditor : LinearLayout {
                     (lastLength <= CHUNK) -> return@onTopReached
                     (lastLength - CHUNK < CHUNK) -> {
                         val buffer = codeText.substring(0, CHUNK)
-                        loaded.replace(0, loaded.length, buffer)
+                        loaded.replace(0, CHUNK, buffer)
+                        startLineNumber -= linesController.pop()
                         CHUNK
                     }
                     else -> {
-                        val buffer = codeText.substring(lastLength - CHUNK * 2, lastLength)
-                        loaded.replace(0, loaded.length, buffer)
+                        val buffer = codeText.substring(lastLength - CHUNK * 2, lastLength - CHUNK)
+                        loaded.replace(0, CHUNK, buffer)
+                        startLineNumber -= linesController.pop()
                         lastLength - CHUNK
                     }
                 }
@@ -159,6 +170,9 @@ class NCodeEditor : LinearLayout {
             }
         })
     }
+
+    private fun getLinesCountFromString(text: String): Int =
+            StringTokenizer(text, System.getProperty("line.separator")).countTokens()
 
     companion object {
         /**

@@ -45,7 +45,7 @@ class CodeEditorLineNumbers : CodeEditor {
 
     private fun drawLineNumber(canvas: Canvas, layout: Layout, positionY: Int, line: Int) {
         val positionX = layout.getLineLeft(line).toInt()
-        canvas.drawText((startLineNumber + line + 1).toString(), (positionX + computeHorizontalScrollOffset()).toFloat(), positionY.toFloat(), paint)
+        canvas.drawText((startLineNumber + line).toString(), (positionX + computeHorizontalScrollOffset()).toFloat(), positionY.toFloat(), paint)
     }
 
     private fun getDigitCount(): Int {

@@ -28,7 +28,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:$android_libraries_version"
     compile "com.android.support:design:$android_libraries_version"
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testCompile 'junit:junit:4.12'
 }
 repositories {
