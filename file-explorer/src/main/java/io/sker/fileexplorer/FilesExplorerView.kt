@@ -45,6 +45,11 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
     private var showAddDirButton: Boolean = false
 
     /**
+     * Show update button
+     */
+    private var showUpdateButton: Boolean = true
+
+    /**
      * FileExplorer
      */
     private lateinit var explorer: FileExplorer
@@ -89,6 +94,12 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
             addDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }
 
+        if (showUpdateButton) {
+            val updateMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_update, Menu.NONE, "Update") // TODO Добавить текстовый ресурс
+            updateMenuItem.setIcon(R.drawable.ic_update_black)
+            updateMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
+
         if (mode == FileExplorer.MODE_DIR) {
             val selectDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_confirm, Menu.NONE, "Select dir") // TODO Добавить текстовый ресурс
             selectDirMenuItem.setIcon(R.drawable.ic_check_black)
@@ -103,6 +114,10 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
                     true
                 }
                 R.id.menu_add_dir -> explorer.addDirectory()
+                R.id.menu_update -> {
+                    explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
+                    true
+                }
                 else -> false
             }
         }
@@ -178,6 +193,17 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
      */
     fun showAddDirButton(show: Boolean): FilesExplorerView {
         this.showAddDirButton = show
+        return this
+    }
+
+    /**
+     * Show update button
+     * @param show - default false
+     * *
+     * @return instance
+     */
+    fun showUpdateButton(show: Boolean): FilesExplorerView {
+        this.showUpdateButton = show
         return this
     }
 

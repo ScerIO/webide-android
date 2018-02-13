@@ -2,4 +2,5 @@
 <resources>
     <item name="menu_add_dir" type="id" />
     <item name="menu_confirm" type="id" />
+    <item name="menu_update" type="id" />
 </resources>
