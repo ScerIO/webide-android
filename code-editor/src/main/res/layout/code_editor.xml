@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<io.sker.codeeditor.components.InteractiveScrollView
+<io.scer.codeeditor.components.InteractiveScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
@@ -8,7 +8,7 @@
     android:paddingEnd="0dp"
     android:layout_marginBottom="50dp">
 
-    <io.sker.codeeditor.components.CodeEditorLineNumbers
+    <io.scer.codeeditor.components.CodeEditorLineNumbers
         android:id="@+id/code_editor"
         android:text="Welcome to Kodis!"
         android:background="@android:color/transparent"
@@ -20,4 +20,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</io.sker.codeeditor.components.InteractiveScrollView>
+</io.scer.codeeditor.components.InteractiveScrollView>
