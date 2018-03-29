@@ -1,0 +1,27 @@
+query News ($offset: Int!, $limit: Int!) {
+	news {
+		all(offset: $offset, limit: $limit) {
+			count
+			nodes {
+				...News
+			}
+			pageInfo {
+				...PageInfo
+			}
+		}
+	}
+}
+
+fragment News on NewsSchema {
+	id
+	title
+	description
+	content
+	image
+	timestamp
+}
+
+fragment PageInfo on PageInfo {
+	hasNextPage
+	hasPreviousPage
+}

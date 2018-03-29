@@ -51,10 +51,11 @@ class FilesAdapter(appContext: Context,
         val icon = view.findViewById<ImageView>(R.id.icon)
         // Set icon
         val iconDrawable: Drawable =
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             context.resources.getDrawable(item.imageDrawableId, context.theme)
-        else
+        } else {
             context.resources.getDrawable(item.imageDrawableId)
+        }
         icon.setImageDrawable(iconDrawable)
 
         // Bind values

@@ -1,10 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.apollographql.android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.1"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "io.scer.ide"
         minSdkVersion 17
@@ -13,13 +15,39 @@ android {
         versionName "0.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+        dataBinding {
+            enabled = true
+        }
+    }
+    signingConfigs  {
+        release {
+            storeFile file("../keystore.jks")
+            storePassword "eclipse16"
+            keyAlias "key0"
+            keyPassword "eclipse16"
+        }
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            signingConfig signingConfigs.release
+        }
     }
+}
+
+ext {
+    archRoomVersion = '1.0.0'
+    archLifecycleVersion = '1.1.0'
 }
 
 dependencies {
@@ -36,10 +64,26 @@ dependencies {
     compile "com.android.support:appcompat-v7:$android_libraries_version"
     compile "com.android.support:cardview-v7:$android_libraries_version"
     compile "com.android.support:support-v4:$android_libraries_version"
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.gms:play-services-plus:11.8.0'
+    compile 'com.google.android.gms:play-services-auth:11.8.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
+    implementation  "android.arch.persistence.room:runtime:$archRoomVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$archRoomVersion"
+    kapt "android.arch.persistence.room:compiler:$archRoomVersion"
+    // Test helpers for LiveData
+    testImplementation "android.arch.core:core-testing:1.1.0"
+    // Test helpers for Room
+    testImplementation "android.arch.persistence.room:testing:1.0.0"
+
+    // API
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
+    compile 'com.apollographql.apollo:apollo-runtime:0.4.4'
+    compile 'com.apollographql.apollo:apollo-rx2-support:0.4.4'
 }
 repositories {
     mavenCentral()

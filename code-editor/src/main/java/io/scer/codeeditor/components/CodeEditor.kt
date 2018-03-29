@@ -11,11 +11,7 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.ReplacementSpan
 import android.util.AttributeSet
-import android.util.Log
-import android.util.TypedValue
-import android.widget.TextView
-import io.scer.codeeditor.R.*
-import io.scer.codeeditor.listeners.OnScrollListener
+import io.scer.codeeditor.R.color
 import java.lang.IllegalStateException
 import java.util.regex.Pattern
 
@@ -42,7 +38,6 @@ open class CodeEditor : AppCompatEditText {
     private var colorBuiltin: Int = 0
     private var colorComment: Int = 0
     private var tabWidth = 0
-    private lateinit var editorLayout: Layout
     
     val cleanText: String
         get() = PATTERN_TRAILING_WHITE_SPACE
@@ -63,8 +58,8 @@ open class CodeEditor : AppCompatEditText {
         highlightWithoutChange(text)
     }
 
-    fun setTextHighlighted(text: CharSequence?) {
-        var text = text
+    fun setTextHighlighted(textTOHighlight: CharSequence?) {
+        var text = textTOHighlight
         if (text == null) {
             text = ""
         }
@@ -82,8 +77,8 @@ open class CodeEditor : AppCompatEditText {
         }
     }
 
-    fun addUniform(statement: String?) {
-        var statement: String? = statement ?: return
+    fun addUniform(statementToAdd: String?) {
+        var statement: String? = statementToAdd ?: return
 
         val e = text
         removeUniform(e, statement)
@@ -144,8 +139,6 @@ open class CodeEditor : AppCompatEditText {
         while (m.find()) {
             idx = m.end()
         }
-
-        setText("Google is your friend.", TextView.BufferType.EDITABLE)
 
         return idx
     }
@@ -398,8 +391,8 @@ open class CodeEditor : AppCompatEditText {
         return source.toString() + indent
     }
 
-    private fun convertTabs(e: Editable, start: Int, count: Int) {
-        var start = start
+    private fun convertTabs(e: Editable, startVal: Int, count: Int) {
+        var start = startVal
         if (tabWidth < 1) {
             return
         }

@@ -27,7 +27,7 @@ class CodeEditorLineNumbers : CodeEditor {
         val firstLine = editorLayout.getLineForVertical(scrollY)
         val lastLine: Int = try {
             editorLayout.getLineForVertical(scrollY + (height - extendedPaddingTop - extendedPaddingBottom))
-        } catch (npe: NullPointerException) {
+        } catch (e: NullPointerException) {
             editorLayout.getLineForVertical(scrollY + (height - paddingTop - paddingBottom))
         }
 

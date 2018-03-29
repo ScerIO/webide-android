@@ -2,7 +2,6 @@ package io.scer.codeeditor.components
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.ScrollView
 import io.scer.codeeditor.listeners.OnScrollListener
 import io.scer.codeeditor.listeners.OnScrollReachedListener

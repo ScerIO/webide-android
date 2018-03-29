@@ -3,15 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" />
-      <module fileurl="file://D:\projects\IDE\android\.idea\android.iml" filepath="D:\projects\IDE\android\.idea\android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\projects\IDE\android\app\app.iml" filepath="D:\projects\IDE\android\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/code-editor/code-editor.iml" filepath="$PROJECT_DIR$/code-editor/code-editor.iml" />
-      <module fileurl="file://D:\projects\IDE\android\code-editor\code-editor.iml" filepath="D:\projects\IDE\android\code-editor\code-editor.iml" />
       <module fileurl="file://$PROJECT_DIR$/file-explorer/file-explorer.iml" filepath="$PROJECT_DIR$/file-explorer/file-explorer.iml" />
-      <module fileurl="file://D:\projects\IDE\android\file-explorer\file-explorer.iml" filepath="D:\projects\IDE\android\file-explorer\file-explorer.iml" />
       <module fileurl="file://$PROJECT_DIR$/ui/ui.iml" filepath="$PROJECT_DIR$/ui/ui.iml" />
-      <module fileurl="file://D:\projects\IDE\android\ui\ui.iml" filepath="D:\projects\IDE\android\ui\ui.iml" />
     </modules>
   </component>
 </project>

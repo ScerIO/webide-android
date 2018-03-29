@@ -3,7 +3,8 @@ package io.scer.ide.util
 import android.Manifest
 import android.content.Context
 import android.support.v4.app.ActivityCompat
-
+import android.support.v7.widget.Toolbar
+import android.widget.TextView
 
 /**
  * Получение высоты статусбара
@@ -38,4 +39,11 @@ fun checkPermissions(context: Context, permissions: Array<String>): ArrayList<In
     for ( permission in permissions )
         result.add(ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE))
     return result
+}
+
+/**
+ * Generate unique id
+ */
+fun uniqueId (): Int {
+    return System.currentTimeMillis().toInt()
 }

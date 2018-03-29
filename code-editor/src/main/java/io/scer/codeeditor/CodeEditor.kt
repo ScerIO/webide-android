@@ -11,7 +11,6 @@ import io.scer.codeeditor.components.InteractiveScrollView
 import io.scer.codeeditor.enums.DocumentLoad
 import io.scer.codeeditor.listeners.OnScrollReachedListener
 import java.util.*
-import kotlin.system.measureTimeMillis
 
 /**
  * Code editor view
@@ -96,6 +95,7 @@ class NCodeEditor : LinearLayout {
                 DocumentLoad.CHUNKS
             }
             false -> {
+                startLineNumber = 1
                 this.loaded.append(codeText)
                 this.codeEditor.setTextHighlighted(loaded)
                 DocumentLoad.CHUNKS
@@ -128,16 +128,16 @@ class NCodeEditor : LinearLayout {
                     (lastLength + CHUNK > codeText.length) -> {
                         val buffer = codeText.substring(lastLength, codeText.length)
                         val linesCount = getLinesCountFromString(loaded.toString())
-                        startLineNumber += linesCount
-                        linesController.push(linesCount)
+                        startLineNumber += linesCount - 1
+                        linesController.push(linesCount - 1)
                         loaded.replace(0, CHUNK, buffer)
                         codeText.length
                     }
                     else -> {
                         val buffer = codeText.substring(lastLength, lastLength + CHUNK)
                         val linesCount = getLinesCountFromString(loaded.toString())
-                        startLineNumber += linesCount
-                        linesController.push(linesCount)
+                        startLineNumber += linesCount - 1
+                        linesController.push(linesCount - 1)
                         loaded.replace(0, CHUNK, buffer)
                         lastLength + CHUNK
                     }
