@@ -11,8 +11,8 @@ android {
         applicationId "io.scer.ide"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 1
-        versionName "0.1.0"
+        versionCode 3
+        versionName "0.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -24,6 +24,12 @@ android {
         dataBinding {
             enabled = true
         }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
     signingConfigs  {
         release {
@@ -47,28 +53,28 @@ android {
 
 ext {
     archRoomVersion = '1.0.0'
-    archLifecycleVersion = '1.1.0'
+    archLifecycleVersion = '1.1.1'
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile project(path: ':ui')
-    compile project(path: ':file-explorer')
-    compile project(path: ':code-editor')
-    compile "com.android.support:design:$android_libraries_version"
-    compile "com.android.support:support-vector-drawable:$android_libraries_version"
-    compile "com.android.support:appcompat-v7:$android_libraries_version"
-    compile "com.android.support:cardview-v7:$android_libraries_version"
-    compile "com.android.support:support-v4:$android_libraries_version"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.android.gms:play-services-plus:11.8.0'
-    compile 'com.google.android.gms:play-services-auth:11.8.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'org.greenrobot:eventbus:3.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(path: ':ui')
+    implementation project(path: ':file-explorer')
+    implementation project(path: ':code-editor')
+    implementation "com.android.support:design:$android_libraries_version"
+    implementation "com.android.support:support-vector-drawable:$android_libraries_version"
+    implementation "com.android.support:appcompat-v7:$android_libraries_version"
+    implementation "com.android.support:cardview-v7:$android_libraries_version"
+    implementation "com.android.support:support-v4:$android_libraries_version"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.google.android.gms:play-services-plus:15.0.0'
+    implementation 'com.google.android.gms:play-services-auth:15.0.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'org.greenrobot:eventbus:3.0.0'
 
     implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
     implementation  "android.arch.persistence.room:runtime:$archRoomVersion"
@@ -76,14 +82,16 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$archRoomVersion"
     kapt "android.arch.persistence.room:compiler:$archRoomVersion"
     // Test helpers for LiveData
-    testImplementation "android.arch.core:core-testing:1.1.0"
+    testImplementation "android.arch.core:core-testing:$archLifecycleVersion"
     // Test helpers for Room
     testImplementation "android.arch.persistence.room:testing:1.0.0"
 
     // API
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
-    compile 'com.apollographql.apollo:apollo-runtime:0.4.4'
-    compile 'com.apollographql.apollo:apollo-rx2-support:0.4.4'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'com.apollographql.apollo:apollo-runtime:0.4.4'
+    implementation 'com.apollographql.apollo:apollo-rx2-support:0.4.4'
+    // License
+    implementation 'com.github.javiersantos:PiracyChecker:1.2.2'
 }
 repositories {
     mavenCentral()

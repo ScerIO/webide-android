@@ -8,11 +8,14 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.*
 import android.widget.ListView
+import android.widget.RelativeLayout
 import io.scer.fileexplorer.R.drawable.ic_add_black
 import io.scer.fileexplorer.R.drawable.ic_check_black
 import io.scer.fileexplorer.items.Item
+import io.scer.fileexplorer.utils.px
 import java.io.File
 
 /**
@@ -83,8 +86,11 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
         view.isFocusableInTouchMode = true
         view.requestFocus()
         view.setOnKeyListener(this)
+
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         val listView = view.findViewById<ListView>(R.id.list_view)
+        listView.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 600.px)
+        Log.e("DP", 600.px.toString())
 
         val createDirectory = object : CreateDirectory() {
             override fun nameEmpty() = Snackbar.make(view, R.string.dirname_empty, Snackbar.LENGTH_LONG).show()

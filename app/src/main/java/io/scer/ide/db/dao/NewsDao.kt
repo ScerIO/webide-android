@@ -35,5 +35,4 @@ interface NewsDao: BaseDao<NewsEntity> {
     @Ignore
     @Insert( onConflict = OnConflictStrategy.FAIL )
     fun insertAll(entity: List<NewsEntity>)
-
 }

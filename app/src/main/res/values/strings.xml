@@ -1,13 +1,14 @@
 <resources>
     <string name="app_name">WEB IDE</string>
+    <string name="project.default_version">1.0.0</string>
     <string name="title">Title</string>
     <string name="version">Version</string>
     <string name="description">Description</string>
     <string name="dir_not_select">Dir not select</string>
     <string name="select">Select</string>
     <string name="create">Create</string>
-    <string name="project.default_version">1.0.0</string>
     <string name="title_activity_editor">Editor</string>
+    <string name="close">Close</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -17,4 +18,8 @@
     <string name="title_news">News</string>
     <string name="title_tools">Tools</string>
     <string name="title_activity_news">News</string>
+
+    <string name="license.error">License verification failed, sorry 😔 \nPlease enable internet️ (If disabled) and restart application
+    \n\nIf application not purchased you can make it by click on button \"purchase\"</string>
+    <string name="license.purchase">Purchase</string>
 </resources>

@@ -14,7 +14,7 @@
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="250dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleTextAppearance="@style/TextAppearance.Design.CollapsingToolbar.Expanded.Shadow"
@@ -48,9 +48,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            app:cardElevation="5dp"
-            app:cardUseCompatPadding="true">
+            app:cardElevation="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

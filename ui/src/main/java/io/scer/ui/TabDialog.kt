@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 
 /**
  * Диалог с вкладками
@@ -23,21 +22,10 @@ class TabDialog : DialogFragment() {
     private var tabs: List<Tab>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val context = context
+        val view = inflater.inflate(R.layout.tab_dialog, null)
 
-        val view = LinearLayout(context)
-        view.orientation = LinearLayout.VERTICAL
-
-        tabLayout = TabLayout(context)
-        view.addView(tabLayout)
-
-        val viewPagerParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0)
-        viewPagerParams.weight = 1.0f
-
-        viewPager = ViewPager(context!!)
-        viewPager.id = R.id.tab_dialog_viewpager
-        viewPager.layoutParams = viewPagerParams
-        view.addView(viewPager)
+        tabLayout = view.findViewById(R.id.tabLayout)
+        viewPager = view.findViewById(R.id.viewPager)
 
         tabLayout.post {
             setupViewPager(viewPager)

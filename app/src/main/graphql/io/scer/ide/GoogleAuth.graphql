@@ -1,0 +1,17 @@
+mutation GoogleAuth ($token: String!) {
+  auth {
+    googleSign(token: $token) {
+      ...User
+    }
+  }
+}
+
+fragment User on UserSchema {
+  id
+  email
+  role
+  token
+  firstName
+  lastName
+  picture
+}

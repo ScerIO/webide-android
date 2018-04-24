@@ -225,7 +225,7 @@
         {
           "kind": "OBJECT",
           "name": "NewsQuery",
-          "description": "News",
+          "description": "News query methods",
           "fields": [
             {
               "name": "all",
@@ -320,7 +320,7 @@
         {
           "kind": "OBJECT",
           "name": "NewsSchema",
-          "description": "qqq",
+          "description": "News schema (GQL Model)",
           "fields": [
             {
               "name": "id",
@@ -388,7 +388,7 @@
             },
             {
               "name": "content",
-              "description": "BBCode content",
+              "description": "HTML content",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -600,7 +600,7 @@
           "description": null,
           "fields": [
             {
-              "name": "editFirstName",
+              "name": "changeFirstName",
               "description": "Change user first name",
               "args": [
                 {
@@ -619,8 +619,62 @@
                 }
               ],
               "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
+                "kind": "OBJECT",
+                "name": "UserSchema",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "changeLastName",
+              "description": "Change user last name (family)",
+              "args": [
+                {
+                  "name": "lastName",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "UserSchema",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "changePicture",
+              "description": "Change user profile picture",
+              "args": [
+                {
+                  "name": "picture",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "UserSchema",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -734,7 +788,7 @@
             },
             {
               "name": "content",
-              "description": "BBCode content",
+              "description": "HTML content",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -743,6 +797,16 @@
                   "name": "String",
                   "ofType": null
                 }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "shareVK",
+              "description": "Share news in group VK",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
               },
               "defaultValue": null
             }
