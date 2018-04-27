@@ -2,6 +2,7 @@ package io.scer.ide.ui.home.fragments.project
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Environment
 import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
@@ -29,20 +30,18 @@ class CreateFragment : TabDialog.TabDialogFragment() {
     private var projectPath: String? = null
 
     private lateinit var title: EditText
-    private lateinit var version: EditText
     private lateinit var description: EditText
     private lateinit var selectedDirPath: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.add_project, container, false)
         title = view.findViewById(R.id.title)
-        version = view.findViewById(R.id.version)
         description = view.findViewById(R.id.description)
         selectedDirPath = view.findViewById(R.id.selected_dir_path)
         val selectDir = view.findViewById<Button>(R.id.select_dir)
         selectDir.setOnClickListener{ selectDir() }
         val create = view.findViewById<Button>(R.id.create)
-        create.setOnClickListener { buttonView -> create(buttonView) }
+        create.setOnClickListener { create(view) }
         return view
     }
 
@@ -51,9 +50,10 @@ class CreateFragment : TabDialog.TabDialogFragment() {
             FileExplorerDialogFragment()
                     .setMode(FileExplorer.MODE_DIR)
                     .showAddDirButton(true)
+                    .showCloseButton(true)
                     .setResultListener { patch, dialog ->
                         projectPath = patch
-                        selectedDirPath.text = patch
+                        selectedDirPath.text = patch.replace(Environment.getExternalStorageDirectory().path, "storage", true)
                         (dialog as FileExplorerDialogFragment).dismiss()
                     }
                     .show(fragmentManager, "CREATE_PROJECT_FILE_EXPLORER")
@@ -61,28 +61,22 @@ class CreateFragment : TabDialog.TabDialogFragment() {
 
     private fun create (view: View) {
         val title: String = title.text.toString()
-        val version: String = version.text.toString()
         val description: String = description.text.toString()
 
-        //TODO Добавить строковый ресурс
-        if (title.isEmpty())
-            return Snackbar.make(view, "Title empty", Snackbar.LENGTH_LONG).show()
-        //TODO Добавить строковый ресурс
-        if (version.isEmpty())
-            return Snackbar.make(view, "Version empty", Snackbar.LENGTH_LONG).show()
-        //TODO Добавить строковый ресурс
+        if (title.isBlank())
+            return Snackbar.make(view, R.string.project_add_title_empty, Snackbar.LENGTH_LONG).show()
+
         if (projectPath == null)
-            return Snackbar.make(view, "Dir not select", Snackbar.LENGTH_LONG).show()
+            return Snackbar.make(view, R.string.project_add_dir_not_selected, Snackbar.LENGTH_LONG).show()
 
         try {
             val projectRootDir = File(projectPath)
-            val project = ProjectEntity.makeProject(projectRootDir, title, description, version)
+            val project = ProjectEntity.makeProject(projectRootDir, title, description)
             viewModel.add(project)
         } catch (e: Exception) {
             when(e) {
                 is JSONException -> {
-                    //TODO Добавить строковый ресурс
-                    Snackbar.make(view, "Error make config", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(view, R.string.project_add_create_config_file_error, Snackbar.LENGTH_LONG).show()
                     return
                 }
                 else -> e.printStackTrace()

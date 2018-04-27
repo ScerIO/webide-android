@@ -22,7 +22,8 @@ class NewsCard(context: Context) : LinearLayout(context) {
     private var title: String? = null
     private var description: String? = null
     private var link: String? = null
-    private var onClickReadMore: (view: View) -> Unit? = {}
+    private var onClickReadMore: View.OnClickListener? = null
+    private var onClickShare: View.OnClickListener? = null
 
     private lateinit var imageView: ImageView
 
@@ -46,16 +47,20 @@ class NewsCard(context: Context) : LinearLayout(context) {
         return this
     }
 
-    fun setOnClickReadMore (onClickReadMore: (view: View) -> Unit): NewsCard  {
+    fun setOnClickReadMore(onClickReadMore: View.OnClickListener): NewsCard  {
         this.onClickReadMore = onClickReadMore
+        return this
+    }
+
+    fun setOnClickShare(onClickReadMore: View.OnClickListener): NewsCard  {
+        this.onClickShare = onClickReadMore
         return this
     }
 
     fun build(): NewsCard {
         this.setBackgroundColor(Color.TRANSPARENT)
         View.inflate(context, R.layout.news_card, this)
-        val windowManager = this.context
-                .getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val windowManager = this.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val deviceWidth = displayMetrics.widthPixels
@@ -66,10 +71,8 @@ class NewsCard(context: Context) : LinearLayout(context) {
         val shareView = findViewById<Button>(R.id.share)
         val readMoreView = findViewById<Button>(R.id.read_more)
 
-        readMoreView.setOnClickListener { this.onClickReadMore(it) }
-        shareView.setOnClickListener {
-            Snackbar.make(this, "Not implemented", Snackbar.LENGTH_LONG).show()
-        }
+        if(this.onClickReadMore != null) readMoreView.setOnClickListener(this.onClickReadMore)
+        if(this.onClickShare != null) shareView.setOnClickListener(this.onClickShare)
 
         titleView.text = this.title ?: ""
         descriptionView.text = this.description ?: ""

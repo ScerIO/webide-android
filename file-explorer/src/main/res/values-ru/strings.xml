@@ -11,4 +11,8 @@
     <string name="error_creating_dir">Ошибка создания папки</string>
     <string name="dirname_empty">Имя папки пустое</string>
     <string name="update">Обновить</string>
+    <string name="file">Файл</string>
+    <string name="add">Добавить</string>
+    <string name="folder">Папка</string>
+    <string name="file_name">Введите имя файла</string>
 </resources>

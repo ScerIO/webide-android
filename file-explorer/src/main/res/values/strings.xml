@@ -1,7 +1,8 @@
 <resources>
     <string name="image" translatable="false">Image</string>
     <string name="make_dir">Make dir</string>
-    <string name="dir_name">Enter dir name</string>
+    <string name="dir_name">Enter folder name</string>
+    <string name="file_name">Enter file name</string>
     <string name="error_creating_dir">Error creating dir</string>
     <string name="dirname_empty">Dirname is empty</string>
     <string name="select.dir">Select dir</string>
@@ -11,4 +12,8 @@
     <string name="items">items</string>
     <string name="weight">Byte</string>
     <string name="update">Update</string>
+    <string name="close">Close</string>
+    <string name="add">Add</string>
+    <string name="file">File</string>
+    <string name="folder">Folder</string>
 </resources>

@@ -4,11 +4,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import io.scer.ide.R
 import io.scer.ide.db.entity.NewsEntity
@@ -24,11 +27,15 @@ class NewsFragment : Fragment() {
     private lateinit var newsView: LinearLayout
     private lateinit var refreshView: SwipeRefreshLayout
 
+    private lateinit var animation: Animation
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_news, container, false)
 
         newsView = view.findViewById(R.id.layout)
         refreshView = view.findViewById(R.id.refresh)
+
+        animation = AnimationUtils.loadAnimation(context, R.anim.fade_and_translate)
 
         this.viewModel.getAll()
                 .observe(this, newsObserver)
@@ -48,15 +55,19 @@ class NewsFragment : Fragment() {
                     .setDescription(news.description)
                     .setImage(news.image)
                     .setLink(news.link)
-                    .setOnClickReadMore({
+                    .setOnClickReadMore(View.OnClickListener  {
                         val intent = Intent(context, NewsActivity::class.java)
                         intent.putExtra("NEWS_ID", news.id)
                         startActivity(intent)
+                    })
+                    .setOnClickShare(View.OnClickListener {
+                        Snackbar.make(view!!, R.string.not_implemented, Snackbar.LENGTH_SHORT).show()
                     })
                     .build()
             newsView.addView(newsToAppend)
         }
         refreshView.isRefreshing = false
+        newsView.startAnimation(animation)
     }
 
     override fun onDestroy() {

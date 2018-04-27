@@ -8,14 +8,10 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.*
 import android.widget.ListView
-import android.widget.RelativeLayout
-import io.scer.fileexplorer.R.drawable.ic_add_black
-import io.scer.fileexplorer.R.drawable.ic_check_black
+import io.scer.fileexplorer.R.drawable.*
 import io.scer.fileexplorer.items.Item
-import io.scer.fileexplorer.utils.px
 import java.io.File
 
 /**
@@ -49,9 +45,19 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
     private var showAddDirButton: Boolean = false
 
     /**
+     * Show add file button
+     */
+    private var showAddFileButton: Boolean = false
+
+    /**
      * Show update button
      */
     private var showUpdateButton: Boolean = true
+
+    /**
+     * Show close button
+     */
+    private var showCloseButton: Boolean = true
 
     /**
      * Callback
@@ -69,6 +75,7 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.FullScreenDialog)
         if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 2)
     }
@@ -89,38 +96,52 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
 
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         val listView = view.findViewById<ListView>(R.id.list_view)
-        listView.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 600.px)
-        Log.e("DP", 600.px.toString())
 
-        val createDirectory = object : CreateDirectory() {
+        val createDirectory = object : CreateError() {
             override fun nameEmpty() = Snackbar.make(view, R.string.dirname_empty, Snackbar.LENGTH_LONG).show()
             override fun error() = Snackbar.make(view, R.string.error_creating_dir, Snackbar.LENGTH_LONG).show()
         }
         explorer = FileExplorer(
                 context = context!!,
-                createDirectory = createDirectory,
+                createError = createDirectory,
                 listView = listView,
                 mode = mode,
                 visibleExtensions = visibleExtensions,
                 resultListener = resultListener)
         toolbar.title = if (mode == FileExplorer.MODE_FILE) resources.getString(R.string.select_file) else resources.getString(R.string.select_dir)
 
-        if (showAddDirButton) {
-            val addDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_add_dir, Menu.NONE, "Add dir") // TODO Добавить текстовый ресурс
-            addDirMenuItem.setIcon(ic_add_black)
-            addDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        if (showAddDirButton || showAddFileButton) {
+            val addMenuItem = toolbar.menu.addSubMenu(Menu.NONE, R.id.menu_add, Menu.NONE, R.string.add)
+            addMenuItem.setIcon(ic_add_black)
+            addMenuItem.item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+
+            if (showAddDirButton) {
+                val addDirMenuItem = addMenuItem.add(Menu.NONE, R.id.menu_add_dir, Menu.NONE, R.string.folder)
+                addDirMenuItem.setIcon(ic_folder_black)
+            }
+
+            if (showAddFileButton) {
+                val addFileMenuItem = addMenuItem.add(Menu.NONE, R.id.menu_add_file, Menu.NONE, R.string.file)
+                addFileMenuItem.setIcon(ic_insert_drive_file_black)
+            }
         }
 
         if (showUpdateButton) {
-            val updateMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_update, Menu.NONE, "Update") // TODO Добавить текстовый ресурс
+            val updateMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_update, Menu.NONE, R.string.update)
             updateMenuItem.setIcon(R.drawable.ic_update_black)
             updateMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }
 
+        if (showCloseButton) {
+            val item = toolbar.menu.add(Menu.NONE, R.id.menu_close, Menu.NONE, R.string.close)
+            item.setIcon(R.drawable.ic_close_black)
+            item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }
+
         if (mode == FileExplorer.MODE_DIR) {
-            val selectDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_confirm, Menu.NONE, "Select dir") // TODO Добавить текстовый ресурс
+            val selectDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_confirm, Menu.NONE, R.string.select_dir)
             selectDirMenuItem.setIcon(ic_check_black)
-            selectDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            selectDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }
 
         toolbar.setOnMenuItemClickListener{ item ->
@@ -131,8 +152,13 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
                     true
                 }
                 R.id.menu_add_dir -> explorer.addDirectory()
+                R.id.menu_add_file -> explorer.addFile()
                 R.id.menu_update -> {
                     explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
+                    true
+                }
+                R.id.menu_close -> {
+                    this@FileExplorerDialogFragment.dismiss()
                     true
                 }
                 else -> false
@@ -213,6 +239,17 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
     }
 
     /**
+     * Show add file button
+     * @param show - default false
+     * *
+     * @return instance
+     */
+    fun showAddFileButton(show: Boolean): FileExplorerDialogFragment {
+        this.showAddFileButton = show
+        return this
+    }
+
+    /**
      * Show update button
      * @param show - default false
      * *
@@ -220,6 +257,17 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
      */
     fun showUpdateButton(show: Boolean): FileExplorerDialogFragment {
         this.showUpdateButton = show
+        return this
+    }
+
+    /**
+     * Show update button
+     * @param show - default false
+     * *
+     * @return instance
+     */
+    fun showCloseButton(show: Boolean): FileExplorerDialogFragment {
+        this.showCloseButton = show
         return this
     }
 

@@ -27,7 +27,7 @@ class NCodeEditor : LinearLayout {
     /**
      * Code editor (Custom EditText)
      */
-    private lateinit var codeEditor: CodeEditorLineNumbers
+    lateinit var codeEditor: CodeEditorLineNumbers
     /**
      * Already load symbols
      */
@@ -38,7 +38,6 @@ class NCodeEditor : LinearLayout {
      */
     var code: String? = ""
         set(value) {
-            if (value.isNullOrBlank()) return
             this.loadDocument(value!!)
         }
 

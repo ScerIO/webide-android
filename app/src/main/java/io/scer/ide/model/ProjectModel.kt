@@ -9,10 +9,6 @@ interface ProjectModel {
      */
     val title: String
     /**
-     * Project version
-     */
-    val version: String
-    /**
      * Project description
      */
     val description: String

@@ -26,23 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:paddingTop="16dp"
-        android:text="@string/version"
-        android:labelFor="@+id/version"/>
-
-    <EditText
-        android:id="@+id/version"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/project.default_version"
-        android:inputType="number" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:paddingTop="16dp"
         android:text="@string/description"
         android:labelFor="@+id/description"/>
 

@@ -9,13 +9,12 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- TODO Добавить текстовый ресурс -->
         <io.scer.ui.TextViewOutline
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textSize="24sp"
-            android:text="Projects"/>
+            android:text="@string/title_projects"/>
 
     </RelativeLayout>
 

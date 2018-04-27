@@ -12,16 +12,19 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import io.scer.ide.R
 import io.scer.ide.db.entity.ProjectEntity
 import io.scer.ide.ui.editor.EditorActivity
-import io.scer.ide.ui.home.views.ProjectCardView
 import io.scer.ide.ui.home.fragments.project.CreateFragment
 import io.scer.ide.ui.home.fragments.project.OpenFragment
+import io.scer.ide.ui.home.views.ProjectCardView
 import io.scer.ide.util.checkPermissions
 import io.scer.ide.viewmodel.ProjectsViewModel
 import io.scer.ui.TabDialog
+import io.scer.ui.TabDialogFullscreen
 
 const val REQUEST_PERMISSIONS_CREATE_PROJECT = 0
 const val DIALOG_PROJECT = "DIALOG_PROJECT"
@@ -36,14 +39,18 @@ class ProjectsFragment : Fragment() {
     /**
      * Диалог добавления проекта и список вкадок
      */
-    private val projectDialog = TabDialog()
+    private val projectDialog = TabDialogFullscreen()
     private val tabs = ArrayList<TabDialog.Tab>()
 
     private lateinit var projectsView: LinearLayout
 
+    private lateinit var animation: Animation
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_projects, container, false)
         projectsView = view.findViewById(R.id.layout)
+
+        animation = AnimationUtils.loadAnimation(context, R.anim.fade_and_translate)
 
         if (tabs.count() < 2 ) {
             val create = CreateFragment.newInstance()
@@ -63,9 +70,7 @@ class ProjectsFragment : Fragment() {
                 projectDialog.show(fragmentManager, DIALOG_PROJECT)
         }
 
-        viewModel.getAll.observe(this, Observer<List<ProjectEntity>> {
-            updateUI(it!!)
-        })
+        viewModel.getAll.observe(this, projectsObserver)
 
         return view
     }
@@ -80,23 +85,31 @@ class ProjectsFragment : Fragment() {
                 if (grantResults.count() > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     projectDialog.show(fragmentManager, DIALOG_PROJECT)
                 else
-                    Snackbar.make(view!!, "Permissions denied", Snackbar.LENGTH_LONG).show()// TODO Текстовый ресурс
+                    Snackbar.make(view!!, R.string.permission_denied, Snackbar.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun updateUI(allProjects: List<ProjectEntity>) {
-        projectsView.removeAllViews()
-        allProjects.forEach({ project ->
+    private val projectsObserver = Observer<List<ProjectEntity>> { list ->
+        if (projectsView.childCount > 0) projectsView.removeAllViews()
+        if (list === null) return@Observer
+
+        list.forEach({ project ->
             try {
                 val projectView = ProjectCardView(context!!)
                 projectView
                         .setTitle(project.title)
-                        .setVersion(project.version)
                         .setDescription(project.description)
                         .onRemoveClickListener(View.OnClickListener {
-                            projectsView.removeView(projectView)
-                            viewModel.delete(project)
+                            Snackbar.make(view!!, R.string.project_removed, Snackbar.LENGTH_LONG)
+                                    .setAction(R.string.undo, {})
+                                    .addCallback(object:Snackbar.Callback() {
+                                        override fun onDismissed(snackbar: Snackbar, event: Int) {
+                                            if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT)
+                                                viewModel.delete(project)
+                                        }
+                                    })
+                                    .show()
                         })
                         .onOpenClickListener(View.OnClickListener {
                             val intent = Intent(context, EditorActivity::class.java)
@@ -109,6 +122,12 @@ class ProjectsFragment : Fragment() {
                 viewModel.delete(project)
             }
         })
+        projectsView.startAnimation(animation)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this.viewModel.getAll.removeObserver(projectsObserver)
     }
 
 }

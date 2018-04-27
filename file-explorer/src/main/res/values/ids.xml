@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="menu_add" type="id" />
     <item name="menu_add_dir" type="id" />
+    <item name="menu_add_file" type="id" />
     <item name="menu_confirm" type="id" />
     <item name="menu_update" type="id" />
+    <item name="menu_close" type="id" />
 </resources>

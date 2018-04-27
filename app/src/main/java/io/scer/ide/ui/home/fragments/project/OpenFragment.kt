@@ -4,16 +4,20 @@ import android.arch.lifecycle.ViewModelProviders
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import io.scer.fileexplorer.FileExplorer
 import io.scer.fileexplorer.FilesExplorerView
+import io.scer.ide.R
 import io.scer.ide.db.entity.ProjectEntity
 import io.scer.ide.util.JSONConfig
+import io.scer.ide.util.px
 import io.scer.ide.viewmodel.ProjectsViewModel
 import io.scer.ui.TabDialog
+import io.scer.ui.TabDialogFullscreen
 import org.json.JSONException
 import java.io.File
 
@@ -37,10 +41,9 @@ class OpenFragment : TabDialog.TabDialogFragment() {
                         viewModel.add(ProjectEntity(configFile.absolutePath))
                     } catch (e: Exception) {
                         return@setResultListener when (e) {
-                            // TODO: Добавить строковые ресурсы
-                            is JSONException ->   Snackbar.make(view, "Error read config", Snackbar.LENGTH_LONG).show()
-                            is SQLiteConstraintException -> Snackbar.make(view, "Project already exist", Snackbar.LENGTH_LONG).show()
-                            else -> Snackbar.make(view, "Error", Snackbar.LENGTH_LONG).show()
+                            is JSONException ->   Snackbar.make(view, R.string.project_config_error_read, Snackbar.LENGTH_LONG).show()
+                            is SQLiteConstraintException -> Snackbar.make(view, R.string.project_config_already_exist, Snackbar.LENGTH_LONG).show()
+                            else -> Snackbar.make(view, R.string.error, Snackbar.LENGTH_LONG).show()
                         }
                     }
                     dialogInstance.dismiss()

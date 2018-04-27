@@ -2,6 +2,7 @@ package io.scer.ide.ui.editor
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -49,6 +50,7 @@ class EditorActivity : AppCompatActivity() {
                 .setMode(FileExplorer.MODE_FILE)
                 .setRootDir(File(configPath))
                 .showAddDirButton(true)
+                .showAddFileButton(true)
                 .setResultListener { path, _ ->
                     if (tabView.visibility  != View.VISIBLE)
                         tabView.visibility = View.VISIBLE
@@ -122,9 +124,9 @@ class EditorActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.action_settings) {
-            return true
+        when(item.itemId) {
+            R.id.settings -> Snackbar.make(this.viewPager, R.string.not_implemented, Snackbar.LENGTH_SHORT).show()
+            R.id.save -> Snackbar.make(this.viewPager, R.string.not_implemented, Snackbar.LENGTH_SHORT).show()
         }
         return super.onOptionsItemSelected(item)
     }

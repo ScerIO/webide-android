@@ -2,6 +2,7 @@ package io.scer.ide.util
 
 import android.Manifest
 import android.content.Context
+import android.content.res.Resources
 import android.support.v4.app.ActivityCompat
 import android.support.v7.widget.Toolbar
 import android.widget.TextView
@@ -47,3 +48,9 @@ fun checkPermissions(context: Context, permissions: Array<String>): ArrayList<In
 fun uniqueId (): Int {
     return System.currentTimeMillis().toInt()
 }
+
+val Int.dp: Int
+    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+
+val Int.px: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()

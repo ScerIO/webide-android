@@ -45,6 +45,11 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
     private var showAddDirButton: Boolean = false
 
     /**
+     * Show add file button
+     */
+    private var showAddFileButton: Boolean = false
+
+    /**
      * Show update button
      */
     private var showUpdateButton: Boolean = true
@@ -75,33 +80,43 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         val listView = findViewById<ListView>(R.id.list_view)
 
-        val createDirectory = object : CreateDirectory() {
+        val createDirectory = object : CreateError() {
             override fun nameEmpty() = Snackbar.make(this@FilesExplorerView, R.string.dirname_empty, Snackbar.LENGTH_LONG).show()
             override fun error() = Snackbar.make(this@FilesExplorerView, R.string.error_creating_dir, Snackbar.LENGTH_LONG).show()
         }
         explorer = FileExplorer(
                 context = context,
-                createDirectory = createDirectory,
+                createError = createDirectory,
                 listView = listView,
                 mode = mode,
                 visibleExtensions = visibleExtensions,
                 resultListener = resultListener)
         toolbar.title = if (mode == FileExplorer.MODE_FILE) resources.getString(R.string.select_file) else resources.getString(R.string.select_dir)
 
-        if (showAddDirButton) {
-            val addDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_add_dir, Menu.NONE, "Add dir") // TODO Добавить текстовый ресурс
-            addDirMenuItem.setIcon(R.drawable.ic_add_black)
-            addDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        if (showAddDirButton || showAddFileButton) {
+            val addMenuItem = toolbar.menu.addSubMenu(Menu.NONE, R.id.menu_add, Menu.NONE, R.string.add)
+            addMenuItem.setIcon(R.drawable.ic_add_black)
+            addMenuItem.item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+
+            if (showAddDirButton) {
+                val addDirMenuItem = addMenuItem.add(Menu.NONE, R.id.menu_add_dir, Menu.NONE, R.string.folder)
+                addDirMenuItem.setIcon(R.drawable.ic_folder_black)
+            }
+
+            if (showAddFileButton) {
+                val addFileMenuItem = addMenuItem.add(Menu.NONE, R.id.menu_add_file, Menu.NONE, R.string.file)
+                addFileMenuItem.setIcon(R.drawable.ic_insert_drive_file_black)
+            }
         }
 
         if (showUpdateButton) {
-            val updateMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_update, Menu.NONE, "Update") // TODO Добавить текстовый ресурс
+            val updateMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_update, Menu.NONE, R.string.update)
             updateMenuItem.setIcon(R.drawable.ic_update_black)
             updateMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }
 
         if (mode == FileExplorer.MODE_DIR) {
-            val selectDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_confirm, Menu.NONE, "Select dir") // TODO Добавить текстовый ресурс
+            val selectDirMenuItem = toolbar.menu.add(Menu.NONE, R.id.menu_confirm, Menu.NONE, R.string.select_dir)
             selectDirMenuItem.setIcon(R.drawable.ic_check_black)
             selectDirMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM)
         }
@@ -114,6 +129,7 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
                     true
                 }
                 R.id.menu_add_dir -> explorer.addDirectory()
+                R.id.menu_add_file -> explorer.addFile()
                 R.id.menu_update -> {
                     explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
                     true
@@ -193,6 +209,17 @@ class FilesExplorerView : RelativeLayout, FileExplorer.IExplorer, View.OnKeyList
      */
     fun showAddDirButton(show: Boolean): FilesExplorerView {
         this.showAddDirButton = show
+        return this
+    }
+
+    /**
+     * Show add file button
+     * @param show - default false
+     * *
+     * @return instance
+     */
+    fun showAddFileButton(show: Boolean): FilesExplorerView {
+        this.showAddFileButton = show
         return this
     }
 

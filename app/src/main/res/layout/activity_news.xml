@@ -27,7 +27,8 @@
                 android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:fitsSystemWindows="true" />
+                android:fitsSystemWindows="true"
+                android:tint="#30ffffff"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

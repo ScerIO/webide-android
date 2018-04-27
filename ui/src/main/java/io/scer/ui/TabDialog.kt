@@ -14,7 +14,7 @@ import android.view.ViewGroup
 /**
  * Диалог с вкладками
  */
-class TabDialog : DialogFragment() {
+open class TabDialog : DialogFragment() {
 
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
@@ -22,7 +22,7 @@ class TabDialog : DialogFragment() {
     private var tabs: List<Tab>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.tab_dialog, null)
+        val view = inflater.inflate(R.layout.tab_dialog, container, false)
 
         tabLayout = view.findViewById(R.id.tabLayout)
         viewPager = view.findViewById(R.id.viewPager)

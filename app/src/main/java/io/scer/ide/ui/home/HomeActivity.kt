@@ -58,9 +58,7 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     /**
-     * TODO: Детальный просмотр новости
      * TODO: Пофиксить отображение номера строки в редакторе
-     * TODO: Добавить проверку лицензии
      */
 
     /**

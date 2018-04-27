@@ -24,10 +24,8 @@ class ProjectEntity(@PrimaryKey
 
     override val description: String get() = config!!.get("description") as String
 
-    override val version: String get() = config!!.get("version") as String
-
     companion object {
-        fun makeProject(projectRootDir: File, title: String, description: String, version: String): ProjectEntity {
+        fun makeProject(projectRootDir: File, title: String, description: String): ProjectEntity {
             if (!projectRootDir.isDirectory || !projectRootDir.canWrite())
                 throw Exception("Can't write in parent directory")
 
@@ -38,7 +36,6 @@ class ProjectEntity(@PrimaryKey
 
             JSONConfig.makeJSONObjectWrapper(configFile)
                     .put("title", title)
-                    .put("version", version)
                     .put("description", description)
                     .commit()
             return ProjectEntity(configFile.absolutePath)

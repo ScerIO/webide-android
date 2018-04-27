@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title">Название</string>
-    <string name="version">Версия</string>
     <string name="description">Описание</string>
     <string name="dir_not_select">Папка не выбрана</string>
     <string name="select">Выберите</string>
     <string name="create">Создать</string>
     <string name="title_activity_editor">Редактор</string>
     <string name="close">Закрыть</string>
+    <string name="remove">Удалить</string>
+    <string name="open">Открыть</string>
 
     <string name="navigation_drawer_open">Открыть навигационное меню</string>
     <string name="navigation_drawer_close">Закрыть навигационное меню</string>
 
-    <string name="action_settings">Настройки</string>
+    <string name="settings">Настройки</string>
+
     <string name="title_projects">Проекты</string>
     <string name="title_news">Новости</string>
     <string name="title_tools">Инструменты</string>
@@ -21,4 +23,17 @@
     <string name="license.error">Ошибка проверки лицензии, извините 😔 \nПожалуйста, включите интернет️ (если выключен) и перезапустите приложение
      \n\nЕсли приложение не приобретено, вы можете сделать это, нажав кнопку \"Приобрести\"</string>
     <string name="license.purchase">Приобрести</string>
+
+    <string name="content">Контент</string>
+    <string name="project.removed">Удален из списка</string>
+    <string name="undo">Отменить</string>
+    <string name="permission_denied">Недостаточно прав</string>
+    <string name="error">Ошибка</string>
+    <string name="project.config.error_read">Ошибка чтения конфурационного файла</string>
+    <string name="project.config.already_exist">Проект уже есть в списке</string>
+    <string name="project.add.title_empty">Название пустое</string>
+    <string name="project.add.dir_not_selected">Папка не выбрана</string>
+    <string name="project.add.create_config_file_error">Ошибка создания конфигурационного файла</string>
+    <string name="save">Сохранить</string>
+    <string name="not_implemented">Не реализованно</string>
 </resources>

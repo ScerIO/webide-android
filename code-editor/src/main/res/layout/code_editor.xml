@@ -10,14 +10,12 @@
 
     <io.scer.codeeditor.components.CodeEditorLineNumbers
         android:id="@+id/code_editor"
-        android:text="Welcome to Kodis!"
         android:background="@android:color/transparent"
         android:textSize="15sp"
-        android:focusable="false"
         android:textColor="@color/textColor"
         android:imeOptions="flagNoExtractUi"
         android:inputType="textVisiblePassword|textMultiLine"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
 
 </io.scer.codeeditor.components.InteractiveScrollView>

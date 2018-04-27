@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.webkit.WebView
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
@@ -25,7 +26,6 @@ class NewsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news)
 
-
         val newsID = intent.getStringExtra("NEWS_ID") ?: "null"
         newsData = viewModel.getById(newsID)
         newsData.observe(this, newsObserver)
@@ -38,6 +38,7 @@ class NewsActivity : AppCompatActivity() {
         if (news == null) return@Observer
         toolbar.title = news.title
         setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         Picasso
                 .with(this@NewsActivity)
@@ -47,6 +48,11 @@ class NewsActivity : AppCompatActivity() {
                 .into(imageView)
 
         contentView.loadData(news.content, "text/html; charset=UTF-8", null)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        finish()
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
