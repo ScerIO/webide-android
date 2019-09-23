@@ -1,17 +1,15 @@
 package io.scer.ide.ui.editor.fragments
 
-
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import io.scer.codeeditor.NCodeEditor
-import io.scer.ide.util.readFile
 import java.io.File
-
 
 /**
  * A simple [Fragment] subclass.
@@ -20,15 +18,15 @@ class FileTabFragment : Fragment() {
 
     private lateinit var view: NCodeEditor
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    val file by lazy(LazyThreadSafetyMode.NONE) {
+        File(arguments!!.getString("path")!!)
+    }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         view = NCodeEditor(context!!)
+        Log.e("FileTabFragmentView", "onCreateView")
 
-
-        val file = File(arguments!!.getString("path")!!)
-        val code = readFile(file)
-
+        val code = file.readText()
         view.code = if (code.isEmpty()) " " else code
         view.codeEditor.isFocusableInTouchMode = true
         view.codeEditor.setSelection(1)
@@ -38,12 +36,25 @@ class FileTabFragment : Fragment() {
             imm.showSoftInput(view.codeEditor, InputMethodManager.SHOW_IMPLICIT)
         })
 
+//        val view = TextView(context)
+//        view.text = file.path
+
         return view
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        view.code = ""
+    fun save () {
+        file.writeText(view.code)
+    }
+
+    companion object {
+        fun newInstance(path: String): FileTabFragment {
+            val bundle = Bundle()
+            bundle.putString("path", path)
+
+            val fileTab = FileTabFragment()
+            fileTab.arguments = bundle
+            return fileTab
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package io.scer.fileexplorer
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
@@ -9,15 +10,28 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.Toolbar
 import android.view.*
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.ListView
 import io.scer.fileexplorer.R.drawable.*
+import io.scer.fileexplorer.adapters.FilesAdapter
 import io.scer.fileexplorer.items.Item
+import org.apache.commons.io.FileExistsException
 import java.io.File
 
 /**
  * Dialog fragment
  */
 class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, View.OnKeyListener {
+    /**
+     * All files view
+     */
+    private lateinit var listView: ListView
+
+    /**
+     * Files adapter
+     */
+    lateinit var adapter: FilesAdapter
 
     /**
      * Absolute root
@@ -95,16 +109,11 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
         view.setOnKeyListener(this)
 
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
-        val listView = view.findViewById<ListView>(R.id.list_view)
+        listView = view.findViewById(R.id.list_view)
 
-        val createDirectory = object : CreateError() {
-            override fun nameEmpty() = Snackbar.make(view, R.string.dirname_empty, Snackbar.LENGTH_LONG).show()
-            override fun error() = Snackbar.make(view, R.string.error_creating_dir, Snackbar.LENGTH_LONG).show()
-        }
         explorer = FileExplorer(
                 context = context!!,
-                createError = createDirectory,
-                listView = listView,
+                onExplore = this::onExplore,
                 mode = mode,
                 visibleExtensions = visibleExtensions,
                 resultListener = resultListener)
@@ -151,8 +160,66 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
                         resultListener!!(currentDir.path, this)
                     true
                 }
-                R.id.menu_add_dir -> explorer.addDirectory()
-                R.id.menu_add_file -> explorer.addFile()
+                R.id.menu_add_dir -> {
+                    val filename = EditText(context)
+                    val wrapper = LinearLayout(context)
+                    val margin = context!!.resources.getDimension(R.dimen.alert_dialog_text_edit_margin).toInt()
+                    val textEditParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    textEditParams.marginStart = margin
+                    textEditParams.marginEnd = margin
+                    filename.layoutParams = textEditParams
+                    wrapper.addView(filename)
+
+                    AlertDialog.Builder(context)
+                            .setTitle(R.string.dir_name)
+                            .setView(wrapper)
+                            .setNegativeButton(android.R.string.cancel, { dialog, _ ->
+                                dialog.dismiss()
+                            })
+                            .setPositiveButton(android.R.string.ok, { _, _ ->
+                                if (filename.text.isEmpty())
+                                    Snackbar.make(view, R.string.dirname_empty, Snackbar.LENGTH_LONG).show()
+                                else try {
+                                    explorer.addFolder(filename.text.toString())
+                                } catch (exception: FileExistsException) {
+                                    Snackbar.make(view, R.string.error_creating_dir, Snackbar.LENGTH_LONG).show()
+                                }
+                            })
+                            .show()
+                    true
+                }
+                R.id.menu_add_file -> {
+                    val filename = EditText(context)
+                    val wrapper = LinearLayout(context)
+                    val margin = context!!.resources.getDimension(R.dimen.alert_dialog_text_edit_margin).toInt()
+                    val textEditParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    textEditParams.marginStart = margin
+                    textEditParams.marginEnd = margin
+                    filename.layoutParams = textEditParams
+                    wrapper.addView(filename)
+
+                    AlertDialog.Builder(context)
+                            .setTitle(R.string.file_name)
+                            .setView(wrapper)
+                            .setNegativeButton(android.R.string.cancel, { dialog, _ ->
+                                dialog.dismiss()
+                            })
+                            .setPositiveButton(android.R.string.ok, { _, _ ->
+                                if (filename.text.isEmpty())
+                                    Snackbar.make(view, R.string.filename_empty, Snackbar.LENGTH_LONG).show()
+                                else try {
+                                    explorer.addFile(filename.text.toString())
+                                } catch (exception: FileExistsException) {
+                                    Snackbar.make(view, R.string.error_creating_file, Snackbar.LENGTH_LONG).show()
+                                }
+                            })
+                            .show()
+                    true
+                }
                 R.id.menu_update -> {
                     explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
                     true
@@ -166,7 +233,7 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
         }
 
         listView.setOnItemClickListener { _, _, position, _ ->
-            val item = explorer.adapter.getItem(position)!!
+            val item = adapter.getItem(position)!!
             if (item.type == Item.TYPE_DIR) {
                 currentDir = File(item.path)
                 explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
@@ -176,6 +243,11 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
         }
         explorer.explore(absoluteRoot ?: Environment.getExternalStorageDirectory(), currentDir)
         return view
+    }
+
+    private fun onExplore(items: ArrayList<Item>) {
+        adapter = FilesAdapter(context!!, R.layout.file_item, items)
+        listView.adapter = adapter
     }
 
     override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
@@ -289,7 +361,7 @@ class FileExplorerDialogFragment : DialogFragment(), FileExplorer.IExplorer, Vie
      * @param grantResults - Results
      */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (grantResults.isNotEmpty() )
+        if (grantResults.isNotEmpty())
             grantResults
                     .filter { it -> it != PackageManager.PERMISSION_GRANTED }
                     .forEach { this.dismiss() }

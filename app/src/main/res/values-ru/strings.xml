@@ -36,4 +36,6 @@
     <string name="project.add.create_config_file_error">Ошибка создания конфигурационного файла</string>
     <string name="save">Сохранить</string>
     <string name="not_implemented">Не реализованно</string>
+    <string name="editor.save.error">Ошибка сохранения</string>
+    <string name="success">Успешно</string>
 </resources>

@@ -4,7 +4,9 @@
     <string name="dir_name">Enter folder name</string>
     <string name="file_name">Enter file name</string>
     <string name="error_creating_dir">Error creating dir</string>
+    <string name="error_creating_file">Error creating file</string>
     <string name="dirname_empty">Dirname is empty</string>
+    <string name="filename_empty">Filename is empty</string>
     <string name="select.dir">Select dir</string>
     <string name="select.file">Select file</string>
     <string name="select">Select</string>

@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 
 class CodeEditorLineNumbers : CodeEditor {
-
     private lateinit var editorLayout: Layout
 
     var startLineNumber: Int = 0
@@ -60,5 +59,4 @@ class CodeEditorLineNumbers : CodeEditor {
 
     private fun getPixels(dp: Int): Float =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), context.resources.displayMetrics)
-
 }

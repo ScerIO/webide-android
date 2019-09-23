@@ -36,10 +36,11 @@ class NCodeEditor : LinearLayout {
     /**
      * Code
      */
-    var code: String? = ""
+    var code: String
         set(value) {
-            this.loadDocument(value!!)
+            this.loadDocument(value)
         }
+        get() = codeEditor.text.toString()
 
     /**
      * @constructor

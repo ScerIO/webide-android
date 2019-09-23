@@ -5,14 +5,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "io.scer.ide"
         minSdkVersion 17
-        targetSdkVersion 27
-        versionCode 7
-        versionName "0.0.7"
+        targetSdkVersion 28
+        versionCode 10
+        versionName "0.0.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -52,7 +52,7 @@ android {
 }
 
 ext {
-    archRoomVersion = '1.0.0'
+    archRoomVersion = '1.1.1'
     archLifecycleVersion = '1.1.1'
 }
 
@@ -65,16 +65,16 @@ dependencies {
     implementation project(path: ':ui')
     implementation project(path: ':file-explorer')
     implementation project(path: ':code-editor')
+    implementation project(path: ':plugin-base')
     implementation "com.android.support:design:$android_libraries_version"
     implementation "com.android.support:support-vector-drawable:$android_libraries_version"
     implementation "com.android.support:appcompat-v7:$android_libraries_version"
     implementation "com.android.support:cardview-v7:$android_libraries_version"
     implementation "com.android.support:support-v4:$android_libraries_version"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.google.android.gms:play-services-plus:15.0.0'
-    implementation 'com.google.android.gms:play-services-auth:15.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation "com.google.android.gms:play-services-plus:$play_service_version"
+    implementation "com.google.android.gms:play-services-auth:$play_service_version"
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'org.greenrobot:eventbus:3.0.0'
 
     implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
     implementation  "android.arch.persistence.room:runtime:$archRoomVersion"
@@ -84,10 +84,10 @@ dependencies {
     // Test helpers for LiveData
     testImplementation "android.arch.core:core-testing:$archLifecycleVersion"
     // Test helpers for Room
-    testImplementation "android.arch.persistence.room:testing:1.0.0"
+    testImplementation "android.arch.persistence.room:testing:$archRoomVersion"
 
     // API
-    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.apollographql.apollo:apollo-runtime:0.4.4'
     implementation 'com.apollographql.apollo:apollo-rx2-support:0.4.4'
     // License

@@ -7,8 +7,7 @@ import okhttp3.OkHttpClient
 class ApiApolloClient {
 
     companion object {
-//        private val API_URL = if (!BuildConfig.DEBUG) "https://api.ide.scer.io/graphql" else "http://192.168.1.60/graphql"
-
+//        private val API_URL = if (!BuildConfig.DEBUG) "https://api.ide.scer.io/graphql" else "http://192.168.1.60:8086/graphql"
         private val API_URL = "https://api.ide.scer.io/graphql"
 
         private var apolloClient: ApolloClient? = null

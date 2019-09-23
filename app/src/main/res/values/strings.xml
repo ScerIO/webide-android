@@ -11,6 +11,7 @@
     <string name="open">Open</string>
     <string name="undo">Undo</string>
     <string name="error">Error</string>
+    <string name="success">Success</string>
     <string name="permission_denied">Permission denied</string>
     <string name="project.removed">Removed from list</string>
     <string name="project.config.error_read">Error read config</string>
@@ -19,7 +20,7 @@
     <string name="project.add.dir_not_selected">Dir not selected</string>
     <string name="project.add.create_config_file_error">Create config file error</string>
     <string name="not_implemented">Not implemented</string>
-
+    <string name="editor.save.error">Saving error</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

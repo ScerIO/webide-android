@@ -9,8 +9,14 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/close"
+        android:title="@string/close"
+        android:icon="@drawable/ic_close_black"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/settings"
-        android:title="@string/action_settings"
+        android:title="@string/settings"
         android:icon="@drawable/ic_settings_black"
         app:showAsAction="ifRoom"/>
 

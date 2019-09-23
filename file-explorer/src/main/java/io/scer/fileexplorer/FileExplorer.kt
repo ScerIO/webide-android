@@ -1,39 +1,28 @@
 package io.scer.fileexplorer
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Environment
 import android.text.format.DateFormat
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.ListView
-import io.scer.fileexplorer.adapters.FilesAdapter
 import io.scer.fileexplorer.items.Item
+import org.apache.commons.io.FileExistsException
 import org.apache.commons.io.FilenameUtils
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Explorer base
  * @param context - Context
- * @param createError - Wrapper
- * @param listView - Files ListView
  * @param mode - Showing mode (Only dirs or dirs & files)
  * @param visibleExtensions - Visible extensions list
  * @param resultListener - Callback
  */
 class FileExplorer (
         private val context: Context,
-        private val createError: CreateError,
-        private val listView: ListView,
+        private val onExplore: (items: ArrayList<Item>) -> Unit,
         private val mode: Byte?,
         private var visibleExtensions: Array<String>?,
         private var resultListener: ((patch: String, explorer: FileExplorer.IExplorer) -> Unit?)?) {
-
-    /**
-     * Files adapter
-     */
-    lateinit var adapter: FilesAdapter
 
     /**
      * Absolute root
@@ -116,8 +105,7 @@ class FileExplorer (
                         date = "",
                         path = rootDirectory.parent,
                         imageDrawableId = R.drawable.ic_arrow_up_black))
-            adapter = FilesAdapter(context, R.layout.file_item, dir)
-            listView.adapter = adapter
+            this.onExplore(dir)
         }
     }
 
@@ -129,80 +117,32 @@ class FileExplorer (
 
     /**
      * Add directory to filesystem
+     * @param folderName
      * *
      * @return - True for toolbar menu click listener
      */
-    fun addDirectory () : Boolean {
-        val filename = EditText(context)
-        val wrapper = LinearLayout(context)
-        val margin = context.resources.getDimension(R.dimen.alert_dialog_text_edit_margin).toInt()
-        val textEditParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT)
-        textEditParams.marginStart = margin
-        textEditParams.marginEnd = margin
-        filename.layoutParams = textEditParams
-        wrapper.addView(filename)
-
-        AlertDialog.Builder(context)
-                .setTitle(R.string.dir_name)
-                .setView(wrapper)
-                .setNegativeButton(android.R.string.cancel, { dialog, _ ->
-                    dialog.dismiss()
-                })
-                .setPositiveButton(android.R.string.ok, { _, _ ->
-                    if (filename.text.isEmpty())
-                        createError.nameEmpty()
-                    else {
-                        val file = File("$currentDir/${filename.text}")
-                        if (!file.isDirectory) {
-                            file.mkdir()
-                            explore(absoluteRoot, currentDir)
-                        } else
-                            createError.error()
-                    }
-                })
-                .show()
-        return true
+    fun addFolder (folderName: String) {
+        val file = File("$currentDir/$folderName")
+        if (!file.isDirectory) {
+            file.mkdir()
+            explore(absoluteRoot, currentDir)
+        } else
+            throw FileExistsException()
     }
 
     /**
      * Add file to filesystem
+     * @param fileName
      * *
      * @return - True for toolbar menu click listener
      */
-    fun addFile () : Boolean {
-        val filename = EditText(context)
-        val wrapper = LinearLayout(context)
-        val margin = context.resources.getDimension(R.dimen.alert_dialog_text_edit_margin).toInt()
-        val textEditParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT)
-        textEditParams.marginStart = margin
-        textEditParams.marginEnd = margin
-        filename.layoutParams = textEditParams
-        wrapper.addView(filename)
-
-        AlertDialog.Builder(context)
-                .setTitle(R.string.file_name)
-                .setView(wrapper)
-                .setNegativeButton(android.R.string.cancel, { dialog, _ ->
-                    dialog.dismiss()
-                })
-                .setPositiveButton(android.R.string.ok, { _, _ ->
-                    if (filename.text.isEmpty())
-                        createError.nameEmpty()
-                    else {
-                        val file = File("$currentDir/${filename.text}")
-                        if (!file.exists()) {
-                            file.createNewFile()
-                            explore(absoluteRoot, currentDir)
-                        } else
-                            createError.error()
-                    }
-                })
-                .show()
-        return true
+    fun addFile (fileName: String) {
+        val file = File("$currentDir/$fileName")
+        if (!file.exists()) {
+            file.createNewFile()
+            explore(absoluteRoot, currentDir)
+        } else
+            throw FileExistsException()
     }
 
     interface IExplorer

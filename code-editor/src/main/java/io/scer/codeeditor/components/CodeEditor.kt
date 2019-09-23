@@ -24,7 +24,7 @@ open class CodeEditor : AppCompatEditText {
             onTextChangedListener!!.onTextChanged( text.toString())
         }
 
-        highlightWithoutChange(text)
+        highlightWithoutChange(text!!)
     }
 
     private var onTextChangedListener: OnTextChangedListener? = null
@@ -55,7 +55,7 @@ open class CodeEditor : AppCompatEditText {
     fun hasErrorLine(): Boolean = errorLine > 0
 
     fun updateHighlighting() {
-        highlightWithoutChange(text)
+        highlightWithoutChange(text!!)
     }
 
     fun setTextHighlighted(textTOHighlight: CharSequence?) {
@@ -80,7 +80,7 @@ open class CodeEditor : AppCompatEditText {
     fun addUniform(statementToAdd: String?) {
         var statement: String? = statementToAdd ?: return
 
-        val e = text
+        val e = text!!
         removeUniform(e, statement)
 
         val m = PATTERN_INSERT_UNIFORM.matcher(e)

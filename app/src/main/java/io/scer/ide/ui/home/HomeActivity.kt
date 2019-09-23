@@ -127,10 +127,10 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         AlertDialog.Builder(this)
                 .setMessage(R.string.license_error)
                 .setCancelable(false)
-                .setPositiveButton(R.string.license_purchase, { _: DialogInterface, _: Int->
+                .setPositiveButton(R.string.license_purchase) { _: DialogInterface, _: Int->
                     val marketIntent = Intent(Intent.ACTION_VIEW, Uri.parse(
                             "http://market.android.com/details?id=$packageName"))
-                    this.startActivity(marketIntent) })
+                    this.startActivity(marketIntent) }
                 .setNegativeButton(R.string.close, { _: DialogInterface, _: Int -> this.finish() })
                 .create()
                 .show()
@@ -167,7 +167,7 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     /**
      * Handle google auth result
      */
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == SIGN_IN) {
@@ -175,7 +175,7 @@ class HomeActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             try {
                 val account = task.getResult(ApiException::class.java)
 
-                Log.d("Home", account.idToken)
+                Log.d("Home", account!!.idToken)
                 this.viewModel.auth(account.idToken!!)
             } catch (e: ApiException) {
                 Log.w("Home", "signInResult:failed code=" + e.statusCode)

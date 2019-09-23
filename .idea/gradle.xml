@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/code-editor" />
             <option value="$PROJECT_DIR$/file-explorer" />
+            <option value="$PROJECT_DIR$/plugin-base" />
             <option value="$PROJECT_DIR$/ui" />
           </set>
         </option>

@@ -2,6 +2,7 @@ package io.scer.fileexplorer.adapters
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,12 +51,7 @@ class FilesAdapter(appContext: Context,
         val lastEditDate = view.findViewById<TextView>(R.id.lastEditDate)
         val icon = view.findViewById<ImageView>(R.id.icon)
         // Set icon
-        val iconDrawable: Drawable =
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            context.resources.getDrawable(item.imageDrawableId, context.theme)
-        } else {
-            context.resources.getDrawable(item.imageDrawableId)
-        }
+        val iconDrawable: Drawable = ContextCompat.getDrawable(context, item.imageDrawableId)!!
         icon.setImageDrawable(iconDrawable)
 
         // Bind values
